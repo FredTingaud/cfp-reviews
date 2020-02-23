@@ -23,7 +23,10 @@ app.use((req, res, next) => {
 });
 
 app.engine('hbs', exphbs({
-    extname: '.hbs'
+    extname: '.hbs',
+    helpers: {
+        nextCfp: this.nextCfp
+    }
 }));
 
 app.set('view engine', 'hbs');
@@ -126,7 +129,7 @@ app.post('/login', (req, res) => {
         res.cookie('AuthToken', authToken);
 
         // Redirect user to the protected page
-        res.redirect('/protected');
+        res.redirect('/cfp');
     } else {
         res.render('home', {
             message: 'Invalid username or password',
@@ -146,6 +149,19 @@ const requireAuth = (req, res, next) => {
     }
 };
 
-app.get('/protected', requireAuth, (req, res) => {
-    res.render('protected');
+const nextCfp = (res) => {
+    const cfpdb = db.get('cfps');
+    const cfp = cfpdb.nth(Math.floor(Math.random() * cfpdb.size().value())).value();
+    res.render('cfp', {
+        title: cfp.titleOfThePresentation,
+        abstract: cfp.abstract,
+        outline: cfp.outline,
+        track: cfp.track,
+        duration: cfp.preferredDuration
+    });
+};
+
+app.get('/cfp', requireAuth, (req, res) => {
+    nextCfp(res);
 });
+
