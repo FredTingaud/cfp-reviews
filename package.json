@@ -1,0 +1,18 @@
+{
+  "name": "cfp-review",
+  "version": "1.0.0",
+  "description": "CFP reviewing tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Fred Tingaud",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "lowdb": "^1.0.0"
+  }
+}
