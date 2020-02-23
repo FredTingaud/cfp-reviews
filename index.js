@@ -150,13 +150,12 @@ const requireAuth = (req, res, next) => {
 
 const nextCfp = (req, res) => {
     const cfpdb = db.get('cfps');
-    const scores = db.get('scores').find({ reviewer: req.user });
+    const scores = db.get('scores').filter({ reviewer: req.user });
+    const scoreCount = scores.size().value();
     let index = Math.floor(Math.random() * cfpdb.size().value());
-    console.log(`comp ${scores.size().value()} ${cfpdb.size().value()}`);
 
-    while (scores.size().value() < cfpdb.size().value() && !_.isEmpty(scores.find({ cfpId: index }).value())) {
+    while (scoreCount < cfpdb.size().value() && !_.isEmpty(scores.find({ cfpId: index.toString() }).value())) {
         index = Math.floor(Math.random() * cfpdb.size().value());
-        console.log(`skipping ${index}`);
     }
     const cfp = cfpdb.nth(index).value();
     res.render('cfp', {
@@ -190,4 +189,4 @@ app.post('/cfp', requireAuth, (req, res) => {
 
 const logObject = (obj) => {
     console.log(JSON.stringify(obj, null, 4));
-}
+};
