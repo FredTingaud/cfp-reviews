@@ -25,13 +25,13 @@ app.use((req, res, next) => {
 app.engine('hbs', exphbs({
     extname: '.hbs',
     helpers: {
-        nextCfp: this.nextCfp
+        breaklines: function (str) {
+            return str.replace("\n", "<br/>");
+        }
     }
 }));
 
 app.set('view engine', 'hbs');
-
-// Our requests hadlers will be implemented here...
 
 app.listen(3000);
 
@@ -118,12 +118,11 @@ const checkPassword = (email, password) => {
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const user = checkPassword(email, password);
-    console.log(`user ${user}`);
     if (user) {
         const authToken = generateAuthToken();
 
         // Store authentication token
-        authTokens[authToken] = user;
+        authTokens[authToken] = email;
 
         // Setting the auth token in cookies
         res.cookie('AuthToken', authToken);
@@ -149,10 +148,19 @@ const requireAuth = (req, res, next) => {
     }
 };
 
-const nextCfp = (res) => {
+const nextCfp = (req, res) => {
     const cfpdb = db.get('cfps');
-    const cfp = cfpdb.nth(Math.floor(Math.random() * cfpdb.size().value())).value();
+    const scores = db.get('scores').find({ reviewer: req.user });
+    let index = Math.floor(Math.random() * cfpdb.size().value());
+    console.log(`comp ${scores.size().value()} ${cfpdb.size().value()}`);
+
+    while (scores.size().value() < cfpdb.size().value() && !_.isEmpty(scores.find({ cfpId: index }).value())) {
+        index = Math.floor(Math.random() * cfpdb.size().value());
+        console.log(`skipping ${index}`);
+    }
+    const cfp = cfpdb.nth(index).value();
     res.render('cfp', {
+        index: index,
         title: cfp.titleOfThePresentation,
         abstract: cfp.abstract,
         outline: cfp.outline,
@@ -162,6 +170,24 @@ const nextCfp = (res) => {
 };
 
 app.get('/cfp', requireAuth, (req, res) => {
-    nextCfp(res);
+    nextCfp(req, res);
 });
 
+app.post('/cfp', requireAuth, (req, res) => {
+    const scores = db.get('scores');
+    input = req.body;
+    scores.push({
+        reviewer: req.user,
+        cfpId: input.cfpId,
+        score: input.score,
+        confidence: input.confidence,
+        committee: input.committee,
+        author: input.author
+    }).write();
+
+    nextCfp(req, res);
+});
+
+const logObject = (obj) => {
+    console.log(JSON.stringify(obj, null, 4));
+}
