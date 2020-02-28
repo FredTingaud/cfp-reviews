@@ -225,6 +225,32 @@ app.post('/cfp', requireAuth, (req, res) => {
     nextCfp(req, res);
 });
 
+app.get('/done', requireAuth, (req, res) => {
+    const cfpdb = db.get('cfps');
+
+    let reviewed = [];
+    let refused = [];
+    const scores = db.get('scores').filter({ reviewer: req.user }).sortBy('cfpId').value();
+    scores.forEach(function (score) {
+        const cfp = cfpdb.nth(parseInt(score.cfpId)).value();
+        if (score.refused) {
+            refused.push({
+                cfpId: score.cfpId,
+                title: cfp.titleOfThePresentation
+            });
+        } else {
+            reviewed.push({
+                cfpId: score.cfpId,
+                title: cfp.titleOfThePresentation
+            });
+        }
+    });
+    res.render('done', {
+        reviewed: reviewed,
+        refused: refused
+    });
+});
+
 const logObject = (obj) => {
     console.log(JSON.stringify(obj, null, 4));
 };
