@@ -84,7 +84,10 @@ app.post('/register', (req, res) => {
             lastName: lastName,
             email: email,
             salt: salt,
-            password: hashedPassword
+            password: hashedPassword,
+            viewBio: false,
+            admin: false,
+            weight: 1.
         }).write();
 
         res.render('home', {
