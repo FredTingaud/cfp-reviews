@@ -27,6 +27,10 @@ app.engine('hbs', exphbs({
     helpers: {
         breaklines: function (str) {
             return str.replace(/\n/gi, "<br/>");
+        },
+        checked: function (value, test) {
+            if (value === undefined) return '';
+            return value === test ? 'checked' : '';
         }
     }
 }));
@@ -160,19 +164,33 @@ const nextCfp = (req, res) => {
     while (scoreCount < cfpdb.size().value() && !_.isEmpty(scores.find({ cfpId: index.toString() }).value())) {
         index = Math.floor(Math.random() * cfpdb.size().value());
     }
-    const cfp = cfpdb.nth(index).value();
-    res.render('cfp', {
-        index: index,
-        title: cfp.titleOfThePresentation,
-        abstract: cfp.abstract,
-        outline: cfp.outline,
-        track: cfp.track,
-        duration: cfp.preferredDuration
-    });
+    res.redirect('/cfp/' + index);
 };
 
 app.get('/cfp', requireAuth, (req, res) => {
     nextCfp(req, res);
+});
+
+app.get('/cfp/:cfpid', requireAuth, (req, res) => {
+    const cfpdb = db.get('cfps');
+    const cfp = cfpdb.nth(parseInt(req.params.cfpid)).value();
+    const score = db.get('scores').find({
+        reviewer: req.user,
+        cfpId: req.params.cfpid
+    }).value();
+
+    res.render('cfp', {
+        index: req.params.cfpid,
+        title: cfp.titleOfThePresentation,
+        abstract: cfp.abstract,
+        outline: cfp.outline,
+        track: cfp.track,
+        duration: cfp.preferredDuration,
+        score: score && score.score,
+        confidence: score && score.confidence,
+        committee: score && score.committee,
+        author: score && score.author
+    });
 });
 
 app.get('/refuse/:cfpid', requireAuth, (req, res) => {

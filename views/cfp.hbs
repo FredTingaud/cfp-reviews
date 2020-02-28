@@ -37,16 +37,16 @@
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label>Least</label>
-                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required>1</label>
-                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required>2</label>
-                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required>3</label>
-                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required>4</label>
-                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required>5</label>
-                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required>6</label>
-                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required>7</label>
-                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required>8</label>
-                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required>9</label>
-                        <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10" required>10</label>
+                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required   {{checked score '1'}}>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required   {{checked score '2'}}>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required   {{checked score '3'}}>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required   {{checked score '4'}}>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required   {{checked score '5'}}>5</label>
+                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required   {{checked score '6'}}>6</label>
+                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required   {{checked score '7'}}>7</label>
+                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required   {{checked score '8'}}>8</label>
+                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required   {{checked score '9'}}>9</label>
+                        <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10" required {{checked score '10'}}>10</label>
                         <label>Most</label>
                     </div>
                 </div>
@@ -57,28 +57,28 @@
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label>Unsure</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence1" name="confidence" value="1" required>1</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence2" name="confidence" value="2" required>2</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence3" name="confidence" value="3" required>3</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence4" name="confidence" value="4" required>4</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence5" name="confidence" value="5" required>5</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence1" name="confidence" value="1" required {{checked confidence '1'}}>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence2" name="confidence" value="2" required {{checked confidence '2'}}>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence3" name="confidence" value="3" required {{checked confidence '3'}}>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence4" name="confidence" value="4" required {{checked confidence '4'}}>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence5" name="confidence" value="5" required {{checked confidence '5'}}>5</label>
                         <label>Certain</label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Comment for the Selection Committee?</label>
-                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee"></textarea>
+                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee">{{comment}}</textarea>
                 </div>
                 <div class="form-group">
                     <label>Comment for the Author? (Remember to keep it constructive and actionable)</label>
-                    <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author"></textarea>
+                    <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author">{{authorComment}}</textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
-    <br/>
+    <br />
     <a href="/cfp" class="btn" formnovalidate>Skip</a>
     <a href="/refuse/{{index}}" class="btn btn-danger">I cannot review this</a>
 
