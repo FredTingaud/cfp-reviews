@@ -5,63 +5,81 @@
 <div>
     <h2>{{title}}</h2>
     {{track}} - {{duration}}
-    <h4>Abstract</h4>
-    <p>{{{breaklines abstract}}}</p>
-    <h4>Outline</h4>
-    <p>{{{breaklines outline}}}</p>
 
-    <form method="POST" action="/cfp">
 
-        <div class="form-group form-inline">
-            <label for="cfpId">CFP #</label>
-            <input name="cfpId" type="text" class="form-control" value="{{index}}" readonly>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#proposal" role="tab" aria-controls="proposal" aria-selected="true">Proposal</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">
+            <h4>Abstract</h4>
+            <p>{{{breaklines abstract}}}</p>
+            <h4>Outline</h4>
+            <p>{{{breaklines outline}}}</p>
         </div>
+        <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
 
-        <div class="form-group">
-            <div>
-                <label>How relevant is this talk to CPPP?</label>
-            </div>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label>Least</label>
-                <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required>1</label>
-                <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required>2</label>
-                <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required>3</label>
-                <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required>4</label>
-                <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required>5</label>
-                <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required>6</label>
-                <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required>7</label>
-                <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required>8</label>
-                <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required>9</label>
-                <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10" required>10</label>
-                <label>Most</label>
-            </div>
-        </div>
+            <form method="POST" action="/cfp">
 
-        <div class="form-group">
-            <div>
-                <label>How confident are you in your choice?</label>
-            </div>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label>Unsure</label>
-                <label class="btn btn-light active"><input type="radio" id="confidence1" name="confidence" value="1" required>1</label>
-                <label class="btn btn-light active"><input type="radio" id="confidence2" name="confidence" value="2" required>2</label>
-                <label class="btn btn-light active"><input type="radio" id="confidence3" name="confidence" value="3" required>3</label>
-                <label class="btn btn-light active"><input type="radio" id="confidence4" name="confidence" value="4" required>4</label>
-                <label class="btn btn-light active"><input type="radio" id="confidence5" name="confidence" value="5" required>5</label>
-                <label>Certain</label>
-            </div>
-        </div>
+                <div class="form-group form-inline">
+                    <label for="cfpId">CFP #</label>
+                    <input name="cfpId" type="text" class="form-control" value="{{index}}" readonly>
+                </div>
 
-        <div class="form-group">
-            <label>Comment for the Selection Committee?</label>
-            <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee"></textarea>
+                <div class="form-group">
+                    <div>
+                        <label>How relevant is this talk to CPPP?</label>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label>Least</label>
+                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required>5</label>
+                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required>6</label>
+                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required>7</label>
+                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required>8</label>
+                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required>9</label>
+                        <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10" required>10</label>
+                        <label>Most</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label>How confident are you in your choice?</label>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label>Unsure</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence1" name="confidence" value="1" required>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence2" name="confidence" value="2" required>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence3" name="confidence" value="3" required>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence4" name="confidence" value="4" required>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence5" name="confidence" value="5" required>5</label>
+                        <label>Certain</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Comment for the Selection Committee?</label>
+                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Comment for the Author? (Remember to keep it constructive and actionable)</label>
+                    <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label>Comment for the Author? (Remember to keep it constructive and actionable)</label>
-            <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author"></textarea>
-        </div>
-        <a href="/cfp" class="btn" formnovalidate>Skip</a>
-        <a href="/refuse/{{index}}" class="btn btn-danger">I cannot review this</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
+    <br/>
+    <a href="/cfp" class="btn" formnovalidate>Skip</a>
+    <a href="/refuse/{{index}}" class="btn btn-danger">I cannot review this</a>
+
 </div>
