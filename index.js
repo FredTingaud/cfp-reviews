@@ -185,7 +185,7 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
         author: ""
     }).write();
 
-    nextCfp(req, res);
+    res.redirect('/cfp');
 });
 
 app.post('/cfp', requireAuth, (req, res) => {
