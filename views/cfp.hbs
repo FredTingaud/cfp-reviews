@@ -12,9 +12,9 @@
 
     <form method="POST" action="/cfp">
 
-        <div class="form-group">
+        <div class="form-group form-inline">
             <label for="cfpId">CFP #</label>
-            <input name="cfpId" type="text" class="form-control inline" value="{{index}}" readonly>
+            <input name="cfpId" type="text" class="form-control" value="{{index}}" readonly>
         </div>
 
         <div class="form-group">
@@ -60,7 +60,8 @@
             <label>Comment for the Author? (Remember to keep it constructive and actionable)</label>
             <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author"></textarea>
         </div>
-        <button href="/cfp" class="btn" formnovalidate>Skip</button>
+        <a href="/cfp" class="btn" formnovalidate>Skip</a>
+        <a href="/refuse/{{index}}" class="btn btn-danger">I cannot review this</a>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

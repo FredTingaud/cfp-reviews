@@ -172,10 +172,27 @@ app.get('/cfp', requireAuth, (req, res) => {
     nextCfp(req, res);
 });
 
+app.get('/refuse/:cfpid', requireAuth, (req, res) => {
+    const scores = db.get('scores');
+    input = req.body;
+    scores.push({
+        refused: true,
+        reviewer: req.user,
+        cfpId: req.params.cfpid,
+        score: 0,
+        confidence: 0,
+        committee: "",
+        author: ""
+    }).write();
+
+    nextCfp(req, res);
+});
+
 app.post('/cfp', requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
     scores.push({
+        refused: false,
         reviewer: req.user,
         cfpId: input.cfpId,
         score: input.score,
