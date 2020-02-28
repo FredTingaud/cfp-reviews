@@ -26,7 +26,7 @@ app.engine('hbs', exphbs({
     extname: '.hbs',
     helpers: {
         breaklines: function (str) {
-            return str.replace("\n", "<br/>");
+            return str.replace(/\n/gi, "<br/>");
         }
     }
 }));
