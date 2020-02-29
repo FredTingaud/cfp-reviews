@@ -212,7 +212,8 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
 app.post('/cfp', requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
-    scores.push({
+    let existing = scores.find({ cfpId: input.cfpId });
+    const item = {
         refused: false,
         reviewer: req.user,
         cfpId: input.cfpId,
@@ -220,7 +221,12 @@ app.post('/cfp', requireAuth, (req, res) => {
         confidence: input.confidence,
         committee: input.committee,
         author: input.author
-    }).write();
+    };
+    if (_.isEmpty(existing.value())) {
+        scores.push(item).write();
+    } else {
+        existing.assign(item).write();
+    }
 
     nextCfp(req, res);
 });
