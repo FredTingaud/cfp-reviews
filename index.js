@@ -29,7 +29,7 @@ app.engine('hbs', exphbs({
     extname: '.hbs',
     helpers: {
         breaklines: function (str) {
-            return str.replace(/\n/gi, "<br/>");
+            return str.replace(/\n/gi, "<br/>").replace(/(https?:\/\/[^\s]+)/g, "<a href=\"\$1\">\$1</a>");
         },
         checked: function (value, test) {
             if (value === undefined) return '';
