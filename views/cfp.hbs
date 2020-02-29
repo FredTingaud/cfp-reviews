@@ -10,7 +10,7 @@
 
 <div>
     <h2>{{title}}</h2>
-    {{track}} - {{duration}} (or possibly {{otherDurations}})
+    {{track}} - {{duration}}{{#if otherDurations}} (or possibly {{otherDurations}}){{/if}}
 
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -25,7 +25,7 @@
         <div class="tab-pane fade show active" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">
             <h4>Abstract</h4>
             <p>{{{breaklines abstract}}}</p>
-            <br/>
+            <br />
             <h4>Outline</h4>
             <p>{{{breaklines outline}}}</p>
         </div>
