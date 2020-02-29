@@ -75,12 +75,38 @@
 
                 <div class="form-group">
                     <label>Comment for the Selection Committee?</label>
-                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee">{{committee}}</textarea>
+                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee" required>{{committee}}</textarea>
                 </div>
+
                 <div class="form-group">
                     <label>Comment for the Author? (Remember to keep it constructive and actionable)</label>
                     <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author">{{author}}</textarea>
                 </div>
+
+                <div class="form-group">
+                    <div>
+                        <label>The author asked for a preferred duration of {{duration}}{{#if otherDurations}}, but said they could also do it in {{otherDurations}}{{/if}}. If you don't agree with the preferred duration, which duration would you recommend?</label>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-light active"><input type="radio" id="duration1" name="durationReco" value="30 minutes" required {{checked durationReco '30 minutes'}}>30 minutes</label>
+                        <label class="btn btn-light active"><input type="radio" id="duration2" name="durationReco" value="60 minutes" required {{checked durationReco '60 minutes'}}>60 minutes</label>
+                        <label class="btn btn-light active"><input type="radio" id="duration3" name="durationReco" value="90 minutes" required {{checked durationReco '90 minutes'}}>90 minutes</label>
+                    </div>
+                    <textarea class="form-control" aria-label="Duration Change Comment" id="duration-comment" name="durationComment">{{durationComment}}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label>The author asked for the track {{track}}. If you don't agree, which would you recommend?</label>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-light active"><input type="radio" id="track1" name="trackReco" value="Progress" required {{checked trackReco 'Progress'}}>Progress</label>
+                        <label class="btn btn-light active"><input type="radio" id="track2" name="trackReco" value="Produce" required {{checked trackReco 'Produce'}}>Produce</label>
+                        <label class="btn btn-light active"><input type="radio" id="track3" name="trackReco" value="Push Forward" required {{checked trackReco 'Push Forward'}}>Push Forward</label>
+                    </div>
+                    <textarea class="form-control" aria-label="Track Change Comment" id="track-comment" name="trackComment">{{trackComment}}</textarea>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

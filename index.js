@@ -190,7 +190,11 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         score: score && score.score,
         confidence: score && score.confidence,
         committee: score && score.committee,
-        author: score && score.author
+        author: score && score.author,
+        durationReco: score && score.durationReco || cfp.preferredDuration,
+        durationComment: score && score.durationComment,
+        trackReco: score && score.trackReco || cfp.track,
+        trackComment: score && score.trackComment
     });
 });
 
@@ -204,7 +208,11 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
         score: 0,
         confidence: 0,
         committee: "",
-        author: ""
+        author: "",
+        durationReco: null,
+        durationComment: "",
+        trackReco: null,
+        trackComment: ""
     }).write();
 
     res.redirect('/cfp');
@@ -221,7 +229,11 @@ app.post('/cfp', requireAuth, (req, res) => {
         score: input.score,
         confidence: input.confidence,
         committee: input.committee,
-        author: input.author
+        author: input.author,
+        durationReco: input.durationReco,
+        durationComment: input.durationComment,
+        trackReco: input.trackReco,
+        trackComment: input.trackComment
     };
     if (_.isEmpty(existing.value())) {
         scores.push(item).write();
