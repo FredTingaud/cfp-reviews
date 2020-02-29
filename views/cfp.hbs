@@ -17,6 +17,11 @@
         <li class="nav-item">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#proposal" role="tab" aria-controls="proposal" aria-selected="true">Proposal</a>
         </li>
+        {{#if seeSpeakers}}
+        <li class="nav-item">
+            <a class="nav-link" id="speaker-tab" data-toggle="tab" href="#speaker" role="tab" aria-controls="speaker" aria-selected="false">Speaker</a>
+        </li>
+        {{/if}}
         <li class="nav-item">
             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
         </li>
@@ -29,6 +34,27 @@
             <h4>Outline</h4>
             <p>{{{breaklines outline}}}</p>
         </div>
+        {{#if seeSpeakers}}
+        <div class="tab-pane fade" id="speaker" role="tabpanel" aria-labelledby="speaker-tab">
+            <h4>{{speakerName}}</h4>
+            <i>({{speakerAffiliation}})</i>
+            <p>{{speakerBio}}</p>
+            <br />
+            {{#if speakerName2}}
+            <h4>{{speakerName2}}</h4>
+            <i>({{speakerAffiliation2}})</i>
+            <p>{{speakerBio2}}</p>
+            <br />
+            {{/if}}
+            <h4>Past Experience</h4>
+            <p>{{pastExperience}}</p>
+            {{#if anything}}
+            <br />
+            <h4>Note</h4>
+            <p>{{anything}}</p>
+            {{/if}}
+        </div>
+        {{/if}}
         <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
 
             <form method="POST" action="/cfp">

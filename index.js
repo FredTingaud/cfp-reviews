@@ -181,6 +181,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         reviewer: req.user,
         cfpId: req.params.cfpid
     }).value();
+    const user = db.get('users').find({ email: req.user }).value();
 
     res.render('cfp', {
         index: req.params.cfpid,
@@ -197,7 +198,16 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         durationReco: score && score.durationReco || cfp.preferredDuration,
         durationComment: score && score.durationComment,
         trackReco: score && score.trackReco || cfp.track,
-        trackComment: score && score.trackComment
+        trackComment: score && score.trackComment,
+        seeSpeakers: user.viewBio,
+        speakerName: cfp.speakerName,
+        speakerAffiliation: cfp.affiliation,
+        speakerBio: cfp.speakerBio,
+        speakerName2: cfp.speakerName2,
+        speakerBio2: cfp.speakerBio2,
+        speakerAffiliation2: cfp.affiliation2,
+        pastExperience: cfp.pastExperience,
+        anything: cfp.isThereAnythingElseYoudLikeToCommunicateToUs
     });
 });
 
