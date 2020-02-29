@@ -186,6 +186,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         outline: cfp.outline,
         track: cfp.track,
         duration: cfp.preferredDuration,
+        otherDurations: cfp.otherPossibleDurations,
         score: score && score.score,
         confidence: score && score.confidence,
         committee: score && score.committee,

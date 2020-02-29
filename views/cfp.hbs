@@ -10,7 +10,7 @@
 
 <div>
     <h2>{{title}}</h2>
-    {{track}} - {{duration}}
+    {{track}} - {{duration}} (or possibly {{otherDurations}})
 
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -25,6 +25,7 @@
         <div class="tab-pane fade show active" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">
             <h4>Abstract</h4>
             <p>{{{breaklines abstract}}}</p>
+            <br/>
             <h4>Outline</h4>
             <p>{{{breaklines outline}}}</p>
         </div>
@@ -43,15 +44,15 @@
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label>Least</label>
-                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required   {{checked score '1'}}>1</label>
-                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required   {{checked score '2'}}>2</label>
-                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required   {{checked score '3'}}>3</label>
-                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required   {{checked score '4'}}>4</label>
-                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required   {{checked score '5'}}>5</label>
-                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required   {{checked score '6'}}>6</label>
-                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required   {{checked score '7'}}>7</label>
-                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required   {{checked score '8'}}>8</label>
-                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required   {{checked score '9'}}>9</label>
+                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required {{checked score '1'}}>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required {{checked score '2'}}>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required {{checked score '3'}}>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required {{checked score '4'}}>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required {{checked score '5'}}>5</label>
+                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required {{checked score '6'}}>6</label>
+                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required {{checked score '7'}}>7</label>
+                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required {{checked score '8'}}>8</label>
+                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required {{checked score '9'}}>9</label>
                         <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10" required {{checked score '10'}}>10</label>
                         <label>Most</label>
                     </div>
