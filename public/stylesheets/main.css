@@ -1,0 +1,6 @@
+
+.form-group.required .control-label:before {
+    content: "*";
+    color: red;
+    font-weight: bold;
+}

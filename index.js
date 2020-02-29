@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const path = require('path');
 const _ = require('lodash');
 
 const app = express();
@@ -11,6 +12,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // To parse cookies from the HTTP Request
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.use((req, res, next) => {
     // Get auth token from the cookies
