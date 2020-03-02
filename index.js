@@ -138,7 +138,7 @@ app.post('/login', (req, res) => {
         res.cookie('AuthToken', authToken);
 
         // Redirect user to the protected page
-        res.redirect('/cfp');
+        res.redirect('/instructions');
     } else {
         res.render('home', {
             message: 'Invalid username or password',
@@ -209,6 +209,14 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         pastExperience: cfp.pastExperience,
         anything: cfp.isThereAnythingElseYoudLikeToCommunicateToUs
     });
+});
+
+app.get('/instructions', requireAuth, (req, res) => {
+    res.render('instructions');
+});
+
+app.post('/instructions', requireAuth, (req, res) => {
+    res.redirect('/cfp');
 });
 
 app.get('/refuse/:cfpid', requireAuth, (req, res) => {
