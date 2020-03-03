@@ -244,11 +244,11 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
 app.post('/cfp', requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
-    let existing = scores.find({ cfpId: input.cfpId, reviewer: req.user, changed: false }).value();
+    let existing = scores.find({ cfpId: input.cfpId, reviewer: req.user, changed: false });
     const item = {
         refused: false,
         changed: false,
-        changeId: _.isEmpty(existing) ? 0 : existing.changeId + 1,
+        changeId: _.isEmpty(existing.value()) ? 0 : existing.value().changeId + 1,
         reviewer: req.user,
         cfpId: input.cfpId,
         score: input.score,
@@ -261,7 +261,7 @@ app.post('/cfp', requireAuth, (req, res) => {
         trackComment: input.trackComment
     };
     scores.push(item).write();
-    if (!_.isEmpty(existing)) {
+    if (!_.isEmpty(existing.value())) {
         existing.assign({ changed: true }).write();
     }
 
