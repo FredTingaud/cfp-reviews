@@ -2,6 +2,11 @@
     <a class="navbar-brand" href="#">My Reviews</a>
 
     <ul class="navbar-nav ml-auto">
+        {{#if admin}}
+        <li class="nav-item">
+            <a class="nav-link" href="/admin">Admin</a>
+        </li>
+        {{/if}}
         <li class="nav-item">
             <a class="nav-link" href="/instructions">Instructions</a>
         </li>

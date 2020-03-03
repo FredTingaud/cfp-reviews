@@ -152,7 +152,7 @@ const requireAuth = (req, res, next) => {
         next();
     } else {
         res.render('home', {
-            message: 'Please home to continue',
+            message: 'Please login to continue',
             messageClass: 'alert-danger'
         });
     }
@@ -207,7 +207,8 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         speakerBio2: cfp.speakerBio2,
         speakerAffiliation2: cfp.affiliation2,
         pastExperience: cfp.pastExperience,
-        anything: cfp.isThereAnythingElseYoudLikeToCommunicateToUs
+        anything: cfp.isThereAnythingElseYoudLikeToCommunicateToUs,
+        admin: user.admin
     });
 });
 
@@ -287,11 +288,35 @@ app.get('/done', requireAuth, (req, res) => {
             });
         }
     });
+    const user = db.get('users').find({ email: req.user }).value();
     res.render('done', {
         reviewed: reviewed,
-        refused: refused
+        refused: refused,
+        admin: user.admin
     });
 });
+
+app.get('/admin', requireAuth, (req, res) => {
+    const user = db.get('users').find({ email: req.user }).value();
+    if (!user.admin) {
+        res.render('home', {
+            message: 'You are not an admin',
+            messageClass: 'alert-danger'
+        });
+        return;
+    }
+    res.render('admin', {
+        helpers: {
+            fixDB: function() {
+                db.get('scores').each((s) => {
+                    s.changeId = s.changedId || 0;
+                    s.changed = s.changed || false;
+                }).write();
+            }
+        }
+    });
+});
+
 
 const logObject = (obj) => {
     console.log(JSON.stringify(obj, null, 4));
