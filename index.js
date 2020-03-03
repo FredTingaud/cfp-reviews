@@ -224,6 +224,7 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
     input = req.body;
     scores.push({
         refused: true,
+        changed: false,
         reviewer: req.user,
         cfpId: req.params.cfpid,
         score: 0,
@@ -242,9 +243,11 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
 app.post('/cfp', requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
-    let existing = scores.find({ cfpId: input.cfpId });
+    let existing = scores.find({ cfpId: input.cfpId, reviewer: req.user, changed: false }).value();
     const item = {
         refused: false,
+        changed: false,
+        changeId: _.isEmpty(existing) ? 0 : existing.changeId + 1,
         reviewer: req.user,
         cfpId: input.cfpId,
         score: input.score,
@@ -256,10 +259,9 @@ app.post('/cfp', requireAuth, (req, res) => {
         trackReco: input.trackReco,
         trackComment: input.trackComment
     };
-    if (_.isEmpty(existing.value())) {
-        scores.push(item).write();
-    } else {
-        existing.assign(item).write();
+    scores.push(item).write();
+    if (!_.isEmpty(existing)) {
+        existing.assign({ changed: true }).write();
     }
 
     nextCfp(req, res);
@@ -270,7 +272,7 @@ app.get('/done', requireAuth, (req, res) => {
 
     let reviewed = [];
     let refused = [];
-    const scores = db.get('scores').filter({ reviewer: req.user }).sortBy('cfpId').value();
+    const scores = db.get('scores').filter({ reviewer: req.user, changed: false }).sortBy('cfpId').value();
     scores.forEach(function (score) {
         const cfp = cfpdb.nth(parseInt(score.cfpId)).value();
         if (score.refused) {

@@ -136,7 +136,7 @@
                     <textarea class="form-control" aria-label="Track Change Comment" id="track-comment" name="trackComment">{{trackComment}}</textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">{{#if score}}Modify{{else}}Submit{{/if}}</button>
             </form>
         </div>
     </div>
