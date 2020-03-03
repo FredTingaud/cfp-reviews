@@ -179,7 +179,8 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     const cfp = cfpdb.nth(parseInt(req.params.cfpid)).value();
     const score = db.get('scores').find({
         reviewer: req.user,
-        cfpId: req.params.cfpid
+        cfpId: req.params.cfpid,
+        changed: false
     }).value();
     const user = db.get('users').find({ email: req.user }).value();
 
