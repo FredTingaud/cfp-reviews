@@ -224,9 +224,14 @@ app.post('/instructions', requireAuth, (req, res) => {
 app.get('/refuse/:cfpid', requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
+    let existing = scores.find({ cfpId: input.cfpId, reviewer: req.user, changed: false });
+    if (!_.isEmpty(existing.value())) {
+        existing.assign({ changed: true }).write();
+    }
     scores.push({
         refused: true,
         changed: false,
+        changeId: _.isEmpty(existing.value()) ? 0 : existing.value().changeId + 1,
         reviewer: req.user,
         cfpId: req.params.cfpid,
         score: 0,
@@ -261,10 +266,10 @@ app.post('/cfp', requireAuth, (req, res) => {
         trackReco: input.trackReco,
         trackComment: input.trackComment
     };
-    scores.push(item).write();
     if (!_.isEmpty(existing.value())) {
         existing.assign({ changed: true }).write();
     }
+    scores.push(item).write();
 
     nextCfp(req, res);
 });
@@ -306,18 +311,20 @@ app.get('/admin', requireAuth, (req, res) => {
         });
         return;
     }
-    res.render('admin', {
-        helpers: {
-            fixDB: function() {
-                db.get('scores').each((s) => {
-                    s.changeId = s.changedId || 0;
-                    s.changed = s.changed || false;
-                }).write();
-            }
-        }
-    });
+    res.render('admin');
 });
 
+app.get('/db-fix', requireAuth, (req, res) => {
+    db.get('scores').each((s) => {
+        const next = db.get('scores').find({
+            changeId: s.changeId + 1,
+            reviewer: s.reviewer,
+            cfpId: s.cfpId
+        }).value();
+        s.changed = !_.isEmpty(next);
+    }).write();
+    res.redirect('/admin');
+});
 
 const logObject = (obj) => {
     console.log(JSON.stringify(obj, null, 4));
