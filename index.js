@@ -198,12 +198,14 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     const score = db.get('scores').find({
         reviewer: req.user,
         cfpId: req.params.cfpid,
-        changed: false
+        changed: false,
+        refused: false
     }).value();
     const user = db.get('users').find({ email: req.user }).value();
     if (!_.isEmpty(score)) {
         reviews = db.get('scores').filter({
-            cfpId: req.params.cfpid
+            cfpId: req.params.cfpid,
+            refused: false
         }).map(s => toReadOnlyReview(s, cfp)).value();
     }
 
