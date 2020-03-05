@@ -31,8 +31,13 @@
         </li>
         {{/if}}
         <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
+            <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
         </li>
+        {{#if reviews}}
+        <li class="nav-item">
+            <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other" aria-selected="false">All Reviews</a>
+        </li>
+        {{/if}}
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">
@@ -144,6 +149,58 @@
                 <button type="submit" class="btn btn-primary">{{#if score}}Modify{{else}}Submit{{/if}}</button>
             </form>
         </div>
+        {{#if reviews}}
+        <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+            {{#each reviews}}
+            <div class="card">
+                <div class="card-header">{{this.reviewer}}</div>
+                <div class="card-body">
+                    {{#if this.changed}}<del>
+                        {{/if}}
+                        <p>Relevance: {{this.score}} / 10</p>
+                        <p>Confidence: {{this.confidence}} / 5</p>
+                        <div class="card">
+                            <div class="card-body">
+                                {{this.committee}}
+                            </div>
+                        </div>
+                        {{#if this.author}}
+                        <div class="card">
+                            <div class="card-body">
+                                {{this.author}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if this.trackReco}}
+                        <br />
+                        <div class="card">
+                            <div class="card-header">
+                                Change track to {{this.trackReco}}
+                            </div>
+                            <div class="card-body">
+                                {{this.trackComment}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if this.durationReco}}
+                        <br />
+                        <div class="card">
+                            <div class="card-header">
+                                Change duration to {{this.durationReco}}
+                            </div>
+                            <div class="card-body">
+                                {{this.durationComment}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if this.changed}}
+                    </del>{{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+
     </div>
     <br />
     <a href="/cfp" class="btn" formnovalidate>Skip</a>

@@ -174,15 +174,38 @@ app.get('/cfp', requireAuth, (req, res) => {
     nextCfp(req, res);
 });
 
+const toReadOnlyReview = (s, cfp) => {
+    const user = db.get('users').find({ email: s.reviewer }).value();
+
+    return {
+        reviewer: user.firstName + " " + user.lastName,
+        changed: s.changed,
+        score: s.score,
+        confidence: s.confidence,
+        committee: s.committee,
+        author: s.author,
+        trackReco: s.trackReco !== cfp.track ? s.trackReco : null,
+        trackComment: s.trackComment,
+        durationReco: s.durationReco !== cfp.preferredDuration ? s.durationReco : null,
+        durationComment: s.durationComment
+    };
+};
+
 app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     const cfpdb = db.get('cfps');
     const cfp = cfpdb.nth(parseInt(req.params.cfpid)).value();
+    let reviews = [];
     const score = db.get('scores').find({
         reviewer: req.user,
         cfpId: req.params.cfpid,
         changed: false
     }).value();
     const user = db.get('users').find({ email: req.user }).value();
+    if (!_.isEmpty(score)) {
+        reviews = db.get('scores').filter({
+            cfpId: req.params.cfpid
+        }).map(s => toReadOnlyReview(s, cfp)).value();
+    }
 
     res.render('cfp', {
         index: req.params.cfpid,
@@ -209,7 +232,8 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         speakerAffiliation2: cfp.affiliation2,
         pastExperience: cfp.pastExperience,
         anything: cfp.isThereAnythingElseYoudLikeToCommunicateToUs,
-        admin: user.admin
+        admin: user.admin,
+        reviews: reviews
     });
 });
 
