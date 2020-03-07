@@ -177,6 +177,8 @@ app.get('/cfp', requireAuth, (req, res) => {
 const toReadOnlyReview = (s, cfp) => {
     const user = db.get('users').find({ email: s.reviewer }).value();
 
+    const t = new Date();
+    t.setTime(s.timestamp);
     return {
         reviewer: user.firstName + " " + user.lastName,
         changed: s.changed,
@@ -187,7 +189,8 @@ const toReadOnlyReview = (s, cfp) => {
         trackReco: s.trackReco !== cfp.track ? s.trackReco : null,
         trackComment: s.trackComment,
         durationReco: s.durationReco !== cfp.preferredDuration ? s.durationReco : null,
-        durationComment: s.durationComment
+        durationComment: s.durationComment,
+        timestamp: t.toLocaleString()
     };
 };
 
@@ -272,7 +275,8 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
         durationReco: null,
         durationComment: "",
         trackReco: null,
-        trackComment: ""
+        trackComment: "",
+        timestamp: Date.now()
     }).write();
 
     res.redirect('/cfp');
@@ -295,7 +299,8 @@ app.post('/cfp', requireAuth, (req, res) => {
         durationReco: input.durationReco,
         durationComment: input.durationComment,
         trackReco: input.trackReco,
-        trackComment: input.trackComment
+        trackComment: input.trackComment,
+        timestamp: Date.now()
     };
     if (!_.isEmpty(existing.value())) {
         existing.assign({ changed: true }).write();
@@ -385,14 +390,7 @@ app.get('/admin', requireAuth, (req, res) => {
 });
 
 app.get('/db-fix', requireAuth, (req, res) => {
-    db.get('scores').each((s) => {
-        const next = db.get('scores').find({
-            changeId: s.changeId + 1,
-            reviewer: s.reviewer,
-            cfpId: s.cfpId
-        }).value();
-        s.changed = !_.isEmpty(next);
-    }).write();
+    db.get('scores').each((s) => {s.timestamp = Date.now();}).write();
     res.redirect('/admin');
 });
 
