@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">My Reviews</a>
+    <a class="navbar-brand" href="#">Overview</a>
 
     <ul class="navbar-nav navbar-expand-md ml-auto">
         {{#if admin}}
@@ -16,17 +16,15 @@
     </ul>
 </nav>
 
+<span class="done">reviews you did</span>
+<span class="skipped">reviews you skipped</span>
 <div>
-    <h2>My reviewed submissions</h2>
-    <ul>
-        {{#each reviewed}}
-        <li><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></li>
+    <table class="table">
+        <thead class="thead-dark"><tr><td>Title</td><td># done</td></tr></thead>
+        <tbody>
+        {{#each reviews}}
+        <tr class={{#if this.reviewed}} "done" {{else if this.refused}} "skipped" {{else}} "" {{/if}}><td><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td><td>{{this.count}}</td></tr>
         {{/each}}
-    </ul>
-    <h2>Submissions I cannot review</h2>
-    <ul>
-        {{#each refused}}
-        <li><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></li>
-        {{/each}}
-    </ul>
+        </tbody>
+    </table>
 </div>

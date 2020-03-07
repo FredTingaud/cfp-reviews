@@ -303,9 +303,13 @@ app.post('/cfp', requireAuth, (req, res) => {
 app.get('/done', requireAuth, (req, res) => {
     const cfpdb = db.get('cfps');
 
+    const scores = db.get('scores').filter({ reviewer: req.user, changed: false }).sortBy('cfpId').value();
+    if (scores.length >= 10) {
+        res.redirect('/overview');
+        return;
+    }
     let reviewed = [];
     let refused = [];
-    const scores = db.get('scores').filter({ reviewer: req.user, changed: false }).sortBy('cfpId').value();
     scores.forEach(function (score) {
         const cfp = cfpdb.nth(parseInt(score.cfpId)).value();
         if (score.refused) {
@@ -324,6 +328,41 @@ app.get('/done', requireAuth, (req, res) => {
     res.render('done', {
         reviewed: reviewed,
         refused: refused,
+        admin: user.admin
+    });
+});
+
+app.get('/overview', requireAuth, (req, res) => {
+    const cfpdb = db.get('cfps').value();
+    const scores = db.get('scores');
+
+    let reviews = [];
+    cfpdb.forEach(function (cfp, id) {
+        const count = scores.filter({ cfpId: id.toString(), changed: false, refused: false }).size().value();
+        const mine = scores.find({cfpId: id.toString(), changed: false, reviewer: req.user}).value();
+        reviews.push({
+            cfpId: id.toString(),
+            title: cfp.titleOfThePresentation,
+            count: count,
+            reviewed: mine && !mine.refused,
+            refused: mine &&  mine.refused
+        });
+    });
+
+    reviews.sort((r1, r2) => {
+        let state1 = r1.reviewed ? 0 : (r1.refused ? 2 : 1);
+        let state2 = r2.reviewed ? 0 : (r2.refused ? 2 : 1);
+        if (state1 === state2) {
+            if (r1.count === r2.count) {
+                return r1.cfpId - r2.cfpId;
+            }
+            return r1.count - r2.count;
+        }
+        return state1 - state2;
+    });
+    const user = db.get('users').find({ email: req.user }).value();
+    res.render('all', {
+        reviews: reviews,
         admin: user.admin
     });
 });

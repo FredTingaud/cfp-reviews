@@ -4,3 +4,11 @@
     color: red;
     font-weight: bold;
 }
+
+.done {
+    background: #ddf0f7
+}
+
+.skipped {
+    background: #d9d9d9
+}
