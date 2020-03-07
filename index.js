@@ -195,6 +195,11 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     const cfpdb = db.get('cfps');
     const cfp = cfpdb.nth(parseInt(req.params.cfpid)).value();
     let reviews = [];
+    const viewBio = db.get('scores').filter({
+        reviewer: req.user,
+        changed: false,
+        refused: false
+    }).size().value() >= 10;
     const score = db.get('scores').find({
         reviewer: req.user,
         cfpId: req.params.cfpid,
@@ -225,7 +230,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         durationComment: score && score.durationComment,
         trackReco: score && score.trackReco || cfp.track,
         trackComment: score && score.trackComment,
-        seeSpeakers: user.viewBio,
+        seeSpeakers: viewBio,
         speakerName: cfp.speakerName,
         speakerAffiliation: cfp.affiliation,
         speakerBio: cfp.speakerBio,
