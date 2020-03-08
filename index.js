@@ -194,22 +194,25 @@ const toReadOnlyReview = (s, cfp) => {
     };
 };
 
+const enoughReviews = (user, count) => {
+    return db.get('scores').filter({
+        reviewer: user,
+        changed: false,
+        refused: false
+    }).size().value() >= count;
+}
+
 app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     const cfpdb = db.get('cfps');
     const cfp = cfpdb.nth(parseInt(req.params.cfpid)).value();
     let reviews = [];
-    const viewBio = db.get('scores').filter({
-        reviewer: req.user,
-        changed: false,
-        refused: false
-    }).size().value() >= 10;
+    const viewBio = enoughReviews(req.user, 10);
     const score = db.get('scores').find({
         reviewer: req.user,
         cfpId: req.params.cfpid,
         changed: false,
         refused: false
     }).value();
-    const user = db.get('users').find({ email: req.user }).value();
     if (!_.isEmpty(score)) {
         reviews = db.get('scores').filter({
             cfpId: req.params.cfpid,
@@ -242,7 +245,6 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         speakerAffiliation2: cfp.affiliation2,
         pastExperience: cfp.pastExperience,
         anything: cfp.isThereAnythingElseYoudLikeToCommunicateToUs,
-        admin: user.admin,
         reviews: reviews
     });
 });
@@ -334,11 +336,9 @@ app.get('/done', requireAuth, (req, res) => {
             });
         }
     });
-    const user = db.get('users').find({ email: req.user }).value();
     res.render('done', {
         reviewed: reviewed,
         refused: refused,
-        admin: user.admin
     });
 });
 
@@ -370,28 +370,46 @@ app.get('/overview', requireAuth, (req, res) => {
         }
         return state1 - state2;
     });
-    const user = db.get('users').find({ email: req.user }).value();
     res.render('all', {
-        reviews: reviews,
-        admin: user.admin
+        reviews: reviews
     });
 });
 
-app.get('/admin', requireAuth, (req, res) => {
+app.get('/account', requireAuth, (req, res) => {
     const user = db.get('users').find({ email: req.user }).value();
-    if (!user.admin) {
-        res.render('home', {
-            message: 'You are not an admin',
-            messageClass: 'alert-danger'
-        });
-        return;
+
+    res.render('account', {
+        admin: user.admin,
+        mail: req.user,
+        firstName: user.firstName,
+        lastName: user.lastName
+    });
+});
+
+app.post('/account', requireAuth, (req, res) => {
+    const { firstName, lastName, password, confirmPassword } = req.body;
+    const user = db.get('users').find({ email: req.user });
+
+    if (password && password === confirmPassword) {
+        const salt = crypto.randomBytes(16).toString('hex');
+        const hashedPassword = getHashedPassword(password, salt);
+
+        user.assign({
+            salt: salt,
+            password: hashedPassword
+        }).write;
+
     }
-    res.render('admin');
+    user.assign({
+        firstName: firstName,
+        lastName: lastName
+    }).write();
+
+    res.redirect('/account');
 });
 
 app.get('/db-fix', requireAuth, (req, res) => {
-    db.get('scores').each((s) => {s.timestamp = Date.now();}).write();
-    res.redirect('/admin');
+    res.redirect('/account');
 });
 
 const logObject = (obj) => {
