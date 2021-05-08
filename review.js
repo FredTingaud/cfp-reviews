@@ -43,11 +43,11 @@ app.set('view engine', 'hbs');
 app.listen(3000);
 
 app.get('/', function (req, res) {
-    res.render('home');
+    res.render('login/home');
 });
 
 app.get('/register', (req, res) => {
-    res.render('register');
+    res.render('login/register');
 });
 
 const crypto = require('crypto');
@@ -73,7 +73,7 @@ app.post('/register', (req, res) => {
         // Check if user with the same email is also registered
         if (!_.isEmpty(db.get('users').find({ email: email }).value())) {
 
-            res.render('register', {
+            res.render('login/register', {
                 message: 'User already registered.',
                 messageClass: 'alert-danger'
             });
@@ -97,12 +97,12 @@ app.post('/register', (req, res) => {
             weight: 1.
         }).write();
 
-        res.render('home', {
+        res.render('login/home', {
             message: 'Registration Complete. Please login to continue.',
             messageClass: 'alert-success'
         });
     } else {
-        res.render('register', {
+        res.render('login/register', {
             message: 'Password does not match.',
             messageClass: 'alert-danger'
         });
@@ -140,7 +140,7 @@ app.post('/login', (req, res) => {
         // Redirect user to the protected page
         res.redirect('/instructions');
     } else {
-        res.render('home', {
+        res.render('login/home', {
             message: 'Invalid username or password',
             messageClass: 'alert-danger'
         });
@@ -151,7 +151,7 @@ const requireAuth = (req, res, next) => {
     if (req.user) {
         next();
     } else {
-        res.render('home', {
+        res.render('login/home', {
             message: 'Please login to continue',
             messageClass: 'alert-danger'
         });
@@ -220,7 +220,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
         }).map(s => toReadOnlyReview(s, cfp)).value();
     }
 
-    res.render('cfp', {
+    res.render('review/cfp', {
         index: req.params.cfpid,
         title: cfp.titleOfThePresentation,
         abstract: cfp.abstract,
@@ -250,7 +250,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
 });
 
 app.get('/instructions', requireAuth, (req, res) => {
-    res.render('instructions');
+    res.render('review/instructions');
 });
 
 app.post('/instructions', requireAuth, (req, res) => {
@@ -336,7 +336,7 @@ app.get('/done', requireAuth, (req, res) => {
             });
         }
     });
-    res.render('done', {
+    res.render('review/done', {
         reviewed: reviewed,
         refused: refused,
     });
@@ -370,7 +370,7 @@ app.get('/overview', requireAuth, (req, res) => {
         }
         return state1 - state2;
     });
-    res.render('all', {
+    res.render('review/all', {
         reviews: reviews
     });
 });
@@ -378,7 +378,7 @@ app.get('/overview', requireAuth, (req, res) => {
 app.get('/account', requireAuth, (req, res) => {
     const user = db.get('users').find({ email: req.user }).value();
 
-    res.render('account', {
+    res.render('login/account', {
         admin: user.admin,
         mail: req.user,
         firstName: user.firstName,
