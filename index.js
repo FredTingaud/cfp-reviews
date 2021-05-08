@@ -8,7 +8,7 @@ const _ = require('lodash');
 const app = express();
 
 // To support URL-encoded bodies
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // To parse cookies from the HTTP Request
 app.use(cookieParser());
