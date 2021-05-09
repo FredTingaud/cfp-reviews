@@ -1,9 +1,15 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const path = require('path');
 const _ = require('lodash');
+const marked = require('marked');
+
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 const app = express();
 
@@ -28,8 +34,11 @@ app.use((req, res, next) => {
 app.engine('hbs', exphbs({
     extname: '.hbs',
     helpers: {
-        breaklines: function (str) {
-            return str.replace(/\n/gi, "<br/>").replace(/(https?:\/\/[^\s]+)/g, "<a href=\"\$1\">\$1</a>");
+        input_long: function (str) {
+            return DOMPurify.sanitize(marked(str || ""));
+        },
+        input_short: function (str) {
+            return DOMPurify.sanitize(marked.parseInline(str || ""));
         },
         checked: function (value, test) {
             if (value === undefined) return '';

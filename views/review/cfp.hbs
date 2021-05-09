@@ -40,29 +40,29 @@
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">
             <h4>Abstract</h4>
-            <p>{{{breaklines abstract}}}</p>
+            <p>{{{input_long abstract}}}</p>
             <br />
             <h4>Outline</h4>
-            <p>{{{breaklines outline}}}</p>
+            <p>{{{input_long outline}}}</p>
         </div>
         {{#if seeSpeakers}}
         <div class="tab-pane fade" id="speaker" role="tabpanel" aria-labelledby="speaker-tab">
-            <h4>{{speakerName}}</h4>
-            <i>({{speakerAffiliation}})</i>
-            <p>{{speakerBio}}</p>
+            <h4>{{{input_short speakerName}}}</h4>
+            <i>({{{input_short speakerAffiliation}}})</i>
+            <p>{{{input_long speakerBio}}}</p>
             <br />
             {{#if speakerName2}}
-            <h4>{{speakerName2}}</h4>
-            <i>({{speakerAffiliation2}})</i>
-            <p>{{speakerBio2}}</p>
+            <h4>{{{input_short speakerName2}}}</h4>
+            <i>({{{input_short speakerAffiliation2}}})</i>
+            <p>{{{input_long speakerBio2}}}</p>
             <br />
             {{/if}}
             <h4>Past Experience</h4>
-            <p>{{pastExperience}}</p>
+            <p>{{{input_long pastExperience}}}</p>
             {{#if anything}}
             <br />
             <h4>Note</h4>
-            <p>{{anything}}</p>
+            <p>{{{input_long anything}}}</p>
             {{/if}}
         </div>
         {{/if}}
