@@ -1,6 +1,5 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const cookieParser = require('cookie-parser');
 const path = require('path');
 const _ = require('lodash');
 const marked = require('marked');
@@ -16,9 +15,6 @@ const app = express();
 
 // To support URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
-
-// To parse cookies from the HTTP Request
-app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '/public')));
 
