@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const _ = require('lodash');
 const marked = require('marked');
+const login = require('./lib/login');
 
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
@@ -20,16 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '/public')));
-
-app.use((req, res, next) => {
-    // Get auth token from the cookies
-    const authToken = req.cookies['AuthToken'];
-
-    // Inject the user to the request
-    req.user = authTokens[authToken];
-
-    next();
-});
 
 app.engine('hbs', exphbs({
     extname: '.hbs',
@@ -51,20 +42,6 @@ app.set('view engine', 'hbs');
 
 app.listen(3000);
 
-app.get('/', function (req, res) {
-    res.render('login/home');
-});
-
-app.get('/register', (req, res) => {
-    res.render('login/register');
-});
-
-const crypto = require('crypto');
-
-const getHashedPassword = (password, salt) => {
-    return crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
-};
-
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
@@ -73,99 +50,7 @@ const db = low(adapter);
 
 db.defaults({ cfps: [], users: [], scores: [] }).write();
 
-app.post('/register', (req, res) => {
-    const { email, firstName, lastName, password, confirmPassword } = req.body;
-
-    // Check if the password and confirm password fields match
-    if (password === confirmPassword) {
-
-        // Check if user with the same email is also registered
-        if (!_.isEmpty(db.get('users').find({ email: email }).value())) {
-
-            res.render('login/register', {
-                message: 'User already registered.',
-                messageClass: 'alert-danger'
-            });
-
-            return;
-        }
-
-
-        const salt = crypto.randomBytes(16).toString('hex');
-        const hashedPassword = getHashedPassword(password, salt);
-
-        // Store user into the database if you are using one
-        db.get('users').push({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            salt: salt,
-            password: hashedPassword,
-            viewBio: false,
-            admin: false,
-            weight: 1.
-        }).write();
-
-        res.render('login/home', {
-            message: 'Registration Complete. Please login to continue.',
-            messageClass: 'alert-success'
-        });
-    } else {
-        res.render('login/register', {
-            message: 'Password does not match.',
-            messageClass: 'alert-danger'
-        });
-    }
-});
-
-const generateAuthToken = () => {
-    return crypto.randomBytes(30).toString('hex');
-};
-
-const authTokens = {};
-
-const checkPassword = (email, password) => {
-    const existing = db.get('users').find({ email: email }).value();
-
-    if (_.isEmpty(existing))
-        return null;
-    const hashedPassword = getHashedPassword(password, existing.salt);
-
-    return existing.password === hashedPassword;
-};
-
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-    const user = checkPassword(email, password);
-    if (user) {
-        const authToken = generateAuthToken();
-
-        // Store authentication token
-        authTokens[authToken] = email;
-
-        // Setting the auth token in cookies
-        res.cookie('AuthToken', authToken);
-
-        // Redirect user to the protected page
-        res.redirect('/instructions');
-    } else {
-        res.render('login/home', {
-            message: 'Invalid username or password',
-            messageClass: 'alert-danger'
-        });
-    }
-});
-
-const requireAuth = (req, res, next) => {
-    if (req.user) {
-        next();
-    } else {
-        res.render('login/home', {
-            message: 'Please login to continue',
-            messageClass: 'alert-danger'
-        });
-    }
-};
+login.prepareLogin(app, db);
 
 const nextCfp = (req, res) => {
     const cfpdb = db.get('cfps');
@@ -179,7 +64,7 @@ const nextCfp = (req, res) => {
     res.redirect('/cfp/' + index);
 };
 
-app.get('/cfp', requireAuth, (req, res) => {
+app.get('/cfp', login.requireAuth, (req, res) => {
     nextCfp(req, res);
 });
 
@@ -211,7 +96,7 @@ const enoughReviews = (user, count) => {
     }).size().value() >= count;
 }
 
-app.get('/cfp/:cfpid', requireAuth, (req, res) => {
+app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
     const cfpdb = db.get('cfps');
     const cfp = cfpdb.nth(parseInt(req.params.cfpid)).value();
     let reviews = [];
@@ -258,15 +143,15 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     });
 });
 
-app.get('/instructions', requireAuth, (req, res) => {
+app.get('/instructions', login.requireAuth, (req, res) => {
     res.render('review/instructions');
 });
 
-app.post('/instructions', requireAuth, (req, res) => {
+app.post('/instructions', login.requireAuth, (req, res) => {
     res.redirect('/cfp');
 });
 
-app.get('/refuse/:cfpid', requireAuth, (req, res) => {
+app.get('/refuse/:cfpid', login.requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
     let existing = scores.find({ cfpId: input.cfpId, reviewer: req.user, changed: false });
@@ -293,7 +178,7 @@ app.get('/refuse/:cfpid', requireAuth, (req, res) => {
     res.redirect('/cfp');
 });
 
-app.post('/cfp', requireAuth, (req, res) => {
+app.post('/cfp', login.requireAuth, (req, res) => {
     const scores = db.get('scores');
     input = req.body;
     let existing = scores.find({ cfpId: input.cfpId, reviewer: req.user, changed: false });
@@ -321,7 +206,7 @@ app.post('/cfp', requireAuth, (req, res) => {
     nextCfp(req, res);
 });
 
-app.get('/done', requireAuth, (req, res) => {
+app.get('/done', login.requireAuth, (req, res) => {
     const cfpdb = db.get('cfps');
 
     const scores = db.get('scores').filter({ reviewer: req.user, changed: false }).sortBy('cfpId').value();
@@ -351,7 +236,7 @@ app.get('/done', requireAuth, (req, res) => {
     });
 });
 
-app.get('/overview', requireAuth, (req, res) => {
+app.get('/overview', login.requireAuth, (req, res) => {
     const cfpdb = db.get('cfps').value();
     const scores = db.get('scores');
 
@@ -384,7 +269,7 @@ app.get('/overview', requireAuth, (req, res) => {
     });
 });
 
-app.get('/account', requireAuth, (req, res) => {
+app.get('/account', login.requireAuth, (req, res) => {
     const user = db.get('users').find({ email: req.user }).value();
 
     res.render('login/account', {
@@ -395,7 +280,7 @@ app.get('/account', requireAuth, (req, res) => {
     });
 });
 
-app.post('/account', requireAuth, (req, res) => {
+app.post('/account', login.requireAuth, (req, res) => {
     const { firstName, lastName, password, confirmPassword } = req.body;
     const user = db.get('users').find({ email: req.user });
 
@@ -417,7 +302,7 @@ app.post('/account', requireAuth, (req, res) => {
     res.redirect('/account');
 });
 
-app.get('/db-fix', requireAuth, (req, res) => {
+app.get('/db-fix', login.requireAuth, (req, res) => {
     res.redirect('/account');
 });
 
