@@ -265,39 +265,6 @@ app.get('/overview', login.requireAuth, (req, res) => {
     });
 });
 
-app.get('/account', login.requireAuth, (req, res) => {
-    const user = db.get('users').find({ email: req.user }).value();
-
-    res.render('login/account', {
-        admin: user.admin,
-        mail: req.user,
-        firstName: user.firstName,
-        lastName: user.lastName
-    });
-});
-
-app.post('/account', login.requireAuth, (req, res) => {
-    const { firstName, lastName, password, confirmPassword } = req.body;
-    const user = db.get('users').find({ email: req.user });
-
-    if (password && password === confirmPassword) {
-        const salt = crypto.randomBytes(16).toString('hex');
-        const hashedPassword = getHashedPassword(password, salt);
-
-        user.assign({
-            salt: salt,
-            password: hashedPassword
-        }).write;
-
-    }
-    user.assign({
-        firstName: firstName,
-        lastName: lastName
-    }).write();
-
-    res.redirect('/account');
-});
-
 app.get('/db-fix', login.requireAuth, (req, res) => {
     res.redirect('/account');
 });
