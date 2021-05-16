@@ -65,7 +65,7 @@ app.get('/cfp', login.requireAuth, (req, res) => {
 });
 
 const toReadOnlyReview = (s, cfp) => {
-    const user = db.get('users').find({ email: s.reviewer }).value();
+    const user = db.get('users').find({ userId: s.reviewer }).value();
 
     const t = new Date();
     t.setTime(s.timestamp);
