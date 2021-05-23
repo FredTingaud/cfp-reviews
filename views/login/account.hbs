@@ -3,10 +3,7 @@
 
     <ul class="navbar-nav navbar-expand-md ml-auto">
         <li class="nav-item">
-            <a class="nav-link" href="/cfp">New Reviews</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/done">Overview</a>
+            <a class="nav-link" href="/instructions">Home</a>
         </li>
     </ul>
 </nav>
@@ -36,6 +33,11 @@
         <label for="confirmPasswordInput">Confirm Password</label>
         <input name="confirmPassword" type="password" class="form-control" id="confirmPasswordInput"
                placeholder="Re-enter your password here">
+    </div>
+
+    <div class="form-group">
+        <label for="bio" class='control-label'>Bio</label>
+        <textarea name="bio" type="text" class="form-control" id="bio-input">{{bio}}</textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Update</button>

@@ -1,0 +1,130 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Propose a Talk</a>
+
+    <ul class="navbar-nav navbar-expand-md ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/account">Account</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/instructions">Instructions</a>
+        </li>
+    </ul>
+</nav>
+
+<div>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active my-3" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">
+            <form method="POST" action="/cfp">
+                <input type="hidden" name="cfpid" value={{cfpid}}/>
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Presentation</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">This part will be visible to all the jury members.</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group required">
+                            <label for="title-input" class='control-label'>Title of the presentation</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{titleAdvice}}}">{{{adviceIcon}}}</button>
+                            <input name="title" type="text" class="form-control" id="title-input" value="{{bio}}" required>
+                        </div>
+                        <div class="form-group required">
+                            <div>
+                                <label class='control-label'>Which Track are you targetting?</label>
+                                <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                    data-placement="right" data-html=true data-content="{{{trackAdvice}}}">{{{adviceIcon}}}</button>
+                            </div>
+                
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-light active"><input type="radio" id="track1" name="track" value="Progress"
+                                        required {{checked track 'Progress' }}>Progress</label>
+                                <label class="btn btn-light active"><input type="radio" id="track2" name="track" value="Produce"
+                                        required {{checked track 'Produce' }}>Produce</label>
+                                <label class="btn btn-light active"><input type="radio" id="track3" name="track" value="Push Forward"
+                                        required {{checked track 'Push Forward' }}>Push Forward</label>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="abstract-input" class='control-label'>Abstract</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{abstractAdvice}}}">{{{adviceIcon}}}</button>
+                            <textarea class="form-control" aria-label="Abstract" id="abstract-input" name="abstract"
+                                required>{{abstract}}</textarea>
+                        </div>
+                        <div class="form-group required">
+                            <label for="outline-input" class='control-label'>Outline</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{outlineAdvice}}}">{{{adviceIcon}}}</button>
+                            <textarea class="form-control" aria-label="Outline" id="outline-input" name="outline"
+                                required>{{outline}}</textarea>
+                        </div>
+                        <div class="form-group required">
+                            <div>
+                                <label class='control-label'>Preferred Talk Duration</label>
+                                <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                    data-placement="right" data-html=true data-content="{{{durationAdvice}}}">{{{adviceIcon}}}</button>
+                            </div>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-light active"><input type="radio" id="duration1" name="duration"
+                                        value="30 minutes" required {{checked duration '30 minutes' }}>30 minutes</label>
+                                <label class="btn btn-light active"><input type="radio" id="duration2" name="duration"
+                                        value="60 minutes" required {{checked duration '60 minutes' }}>60 minutes</label>
+                                <label class="btn btn-light active"><input type="radio" id="duration3" name="duration"
+                                        value="90 minutes" required {{checked duration '90 minutes' }}>90 minutes</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="anything-input" class='control-label'>Is there anything else you would like to tell
+                                us?</label>
+                            <textarea class="form-control" aria-label="Is there anything else you would like to tell us?"
+                                id="anything-input" name="anything">{{anything}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Speaker</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">This part will be visible only to the organizers after a first phase of anonymous scoring has been completed.</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group required">
+                            <label for="firstNameInput" class='control-label'>First Name</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{nameAdvice}}}">{{{adviceIcon}}}</button>
+                            <input name="firstName" type="text" class="form-control" id="firstNameInput" value="{{firstName}}" required>
+                        </div>
+                
+                        <div class="form-group required">
+                            <label for="lastNameInput" class='control-label'>Last Name</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{nameAdvice}}}">{{{adviceIcon}}}</button>
+                            <input name="lastName" type="text" class="form-control" id="lastNameInput" value="{{lastName}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="affiliationInput" class='control-label'>Affiliation</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{affiliationAdvice}}}">{{{adviceIcon}}}</button>
+                            <input name="affiliation" type="text" class="form-control" id="affiliationInput" value="{{affiliation}}">
+                        </div>
+                        <div class="form-group required">
+                            <label for="bio-input" class='control-label'>Bio</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{bioAdvice}}}">{{{adviceIcon}}}</button>
+                            <textarea name="bio" type="text" class="form-control" id="bio-input" required>{{bio}}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="past-input" class='control-label'>Past Experience As a Speaker</label>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                data-placement="right" data-html=true data-content="{{{experienceAdvice}}}">{{{adviceIcon}}}</button>
+                            <textarea name="pastExperience" type="text" class="form-control" id="past-input"
+                                required>{{pastExperience}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="tab-pane fade show active" id="preview" role="tabpanel" aria-labelledby="preview-tab">
+        </div>
+    </div>
+</div>

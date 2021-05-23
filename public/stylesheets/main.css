@@ -12,3 +12,7 @@
 .skipped {
     background: #d9d9d9
 }
+
+.popover{
+    max-width: 40%;
+}

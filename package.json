@@ -9,6 +9,7 @@
   "author": "Fred Tingaud",
   "license": "ISC",
   "dependencies": {
+    "@primer/octicons": "^14.1.0",
     "cookie-parser": "^1.4.4",
     "dompurify": "^2.2.8",
     "express": "^4.17.1",
@@ -16,6 +17,7 @@
     "jsdom": "^16.5.3",
     "lowdb": "^1.0.0",
     "marked": "^2.0.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "shortid": "^2.2.16"
   }
 }
