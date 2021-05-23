@@ -66,6 +66,7 @@ app.get('/cfp', login.requireAuth, (req, res) => {
         adviceIcon: octicons['light-bulb'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
         titleAdvice: DOMPurify.sanitize(marked(advices.title)),
         trackAdvice: advices.track,
+        languageAdvice: advices.language,
         abstractAdvice: marked(advices.abstract),
         outlineAdvice: marked(advices.outline),
         nameAdvice: marked(advices.name),
@@ -76,7 +77,7 @@ app.get('/cfp', login.requireAuth, (req, res) => {
         cfpid: shortid.generate(),
         firstName: user.firstName,
         lastName: user.lastName,
-        bio: user.bio,
+        bio: user.speakerBio,
         affiliation: user.affiliation,
         pastExperience: user.pastExperience
     });
@@ -85,11 +86,15 @@ app.get('/cfp', login.requireAuth, (req, res) => {
 app.post('/cfp', login.requireAuth, (req, res) => {
     input = req.body;
 
-    const proposal = db.get('cfps');
-    proposal.push({
+    const proposals = db.get('cfps');
+    let existing = proposals.find({ cfpId: input.cfpId, changed: false });
+    if (!_.isEmpty(existing.value())) {
+        existing.assign({ changed: true }).write();
+    }
+    proposals.push({
         timestamp: Date.now,
         changed: false,
-        changeId: 0,
+        changeId: _.isEmpty(existing.value()) ? 0 : existing.value().changeId + 1,
         index: input.cfpid,
         titleOfThePresentation: input.title,
         abstract: input.abstract,
@@ -98,6 +103,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         preferredDuration: input.duration,
         otherPossibleDurations: input.otherDurations,
         isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
+        language: input.language,
         writer: req.user
         }).write();
 
@@ -110,7 +116,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         pastExperience: input.pastExperience
         }).write();
 
-    res.render("/proposal/done");
+    res.render("proposal/done");
 });
 
 const logObject = (obj) => {
