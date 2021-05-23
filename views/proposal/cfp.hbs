@@ -8,6 +8,11 @@
         <li class="nav-item">
             <a class="nav-link" href="/instructions">Instructions</a>
         </li>
+        {{#if hasProposals}}
+        <li class="nav-item">
+            <a class="nav-link" href="/proposals">My Proposals</a>
+        </li>
+        {{/if}}
     </ul>
 </nav>
 
@@ -138,7 +143,7 @@
                     </div>
                 </div>
                 <div class="form-group required">
-                    <input type="checkbox" name="coc" value="" required id="coc-input">
+                    <input type="checkbox" name="coc" value="ok" required id="coc-input" {{#if coc}}checked{{/if}}>
                     <label for="coc-input" class="control-label">I agree to respect the <a
                             href="https://berlincodeofconduct.org/">Berlin Code Of Conduct</a></label>
                 </div>

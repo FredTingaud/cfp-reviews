@@ -6,8 +6,13 @@
             <a class="nav-link" href="/account">Account</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/cfp">Propose</a>
+            <a class="nav-link" href="/cfp">New Proposal</a>
         </li>
+        {{#if hasProposals}}
+        <li class="nav-item">
+            <a class="nav-link" href="/proposals">My Proposals</a>
+        </li>
+        {{/if}}
     </ul>
 </nav>
 

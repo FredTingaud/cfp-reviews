@@ -9,11 +9,16 @@
             <a class="nav-link" href="/instructions">Instructions</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/proposals">My Proposals</a>
+            <a class="nav-link" href="/cfp">New Proposal</a>
         </li>
     </ul>
 </nav>
 
-<p>Thanks for submitting your proposal!</p>
-
-<a class="btn btn-primary" href="/proposals">View or edit my proposals</a>
+<div>
+    <h1>My proposals</h1>
+    {{#each proposals}}
+    <a href="/cfp/{{this.index}}">{{this.titleOfThePresentation}}</a><br />
+    {{/each}}
+    <br />
+    <a class="btn btn-primary" href="/cfp">Write a new proposal</a>
+</div>

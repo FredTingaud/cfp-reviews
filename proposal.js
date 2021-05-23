@@ -52,15 +52,18 @@ db.defaults({ cfps: [], users: [], scores: [] }).write();
 login.prepareLogin(app, db);
 
 app.get('/instructions', login.requireAuth, (req, res) => {
-    res.render('proposal/instructions');
+    let existing = db.get('cfps').filter({ writer: req.user });
+
+    res.render('proposal/instructions', {hasProposals: !_.isEmpty(existing.value())});
 });
 
 app.post('/instructions', login.requireAuth, (req, res) => {
     res.redirect('/cfp');
 });
 
-app.get('/cfp', login.requireAuth, (req, res) => {
+const renderCFP = (proposal, req, res) => {
     const user = db.get('users').find({ userId: req.user }).value();
+    let existing = db.get('cfps').filter({ writer: req.user });
 
     res.render('proposal/cfp', {
         adviceIcon: octicons['light-bulb'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
@@ -74,23 +77,56 @@ app.get('/cfp', login.requireAuth, (req, res) => {
         affiliationAdvice: marked(advices.affiliation),
         durationAdvice: marked(advices.duration),
         experienceAdvice: advices.experience,
-        cfpid: shortid.generate(),
+        cfpid: proposal.cfpid,
         firstName: user.firstName,
         lastName: user.lastName,
         bio: user.speakerBio,
         affiliation: user.affiliation,
-        pastExperience: user.pastExperience
+        pastExperience: user.pastExperience,
+        title: proposal.title,
+        abstract: proposal.abstract,
+        outline: proposal.outline,
+        track: proposal.track,
+        anything: proposal.anything,
+        language: proposal.language,
+        duration: proposal.duration,
+        coc: proposal.coc,
+        hasProposals: !_.isEmpty(existing.value())
     });
+
+};
+
+app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
+    const proposals = db.get('cfps');
+    let proposal = proposals.find({ index: req.params.cfpid, writer: req.user, changed: false }).value();
+
+    renderCFP({
+        title: proposal.titleOfThePresentation,
+        abstract: proposal.abstract,
+        outline: proposal.outline,
+        track: proposal.track,
+        duration: proposal.preferredDuration,
+        anything: proposal.isThereAnythingElseYoudLikeToCommunicateToUs,
+        language: proposal.language,
+        coc: proposal.coc,
+        cfpid: req.params.cfpid
+    }, req, res);
 });
+
+app.get('/cfp', login.requireAuth, (req, res) => {
+    renderCFP({cfpid: shortid.generate()}, req, res);
+});
+
 
 app.post('/cfp', login.requireAuth, (req, res) => {
     input = req.body;
+    if (!input.coc){
+        return;
+    }
 
     const proposals = db.get('cfps');
-    let existing = proposals.find({ cfpId: input.cfpId, changed: false });
-    if (!_.isEmpty(existing.value())) {
-        existing.assign({ changed: true }).write();
-    }
+    let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false });
+
     proposals.push({
         timestamp: Date.now,
         changed: false,
@@ -104,9 +140,14 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         otherPossibleDurations: input.otherDurations,
         isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
         language: input.language,
+        coc: input.coc,
         writer: req.user
         }).write();
 
+        if (!_.isEmpty(existing.value())) {
+            existing.assign({ changed: true }).write();
+        }
+    
     const user = db.get('users').find({ userId: req.user });
     user.assign({
         firstName: input.firstName,
@@ -117,6 +158,12 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         }).write();
 
     res.render("proposal/done");
+});
+
+app.get('/proposals', login.requireAuth, (req, res) => {
+    let proposals = db.get('cfps').filter({ writer: req.user, changed: false }).sortBy('index').value();
+
+    res.render("proposal/all", {proposals: proposals});
 });
 
 const logObject = (obj) => {
