@@ -127,7 +127,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
     const proposals = db.get('cfps');
     let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false });
 
-    proposals.push({
+    const newLocal = {
         timestamp: Date.now,
         changed: false,
         changeId: _.isEmpty(existing.value()) ? 0 : existing.value().changeId + 1,
@@ -142,12 +142,14 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         language: input.language,
         coc: input.coc,
         writer: req.user
-        }).write();
+    };
 
-        if (!_.isEmpty(existing.value())) {
-            existing.assign({ changed: true }).write();
-        }
-    
+    if (!_.isEmpty(existing.value())) {
+        existing.assign({ changed: true }).write();
+    }
+
+    proposals.push(newLocal).write();
+
     const user = db.get('users').find({ userId: req.user });
     user.assign({
         firstName: input.firstName,
