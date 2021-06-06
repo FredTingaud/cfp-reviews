@@ -64,6 +64,7 @@ app.post('/instructions', login.requireAuth, (req, res) => {
 const renderCFP = (proposal, req, res) => {
     const user = db.get('users').find({ userId: req.user }).value();
     let existing = db.get('cfps').filter({ writer: req.user });
+    let possibleTags = ['refactoring', 'testing', 'coding', 'accessibility'].concat(proposal.tags.split(','));
 
     res.render('proposal/cfp', {
         adviceIcon: octicons['light-bulb'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
@@ -77,6 +78,7 @@ const renderCFP = (proposal, req, res) => {
         affiliationAdvice: marked(advices.affiliation),
         durationAdvice: marked(advices.duration),
         experienceAdvice: advices.experience,
+        tagsAdvice: advices.tags,
         cfpid: proposal.cfpid,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -87,11 +89,13 @@ const renderCFP = (proposal, req, res) => {
         abstract: proposal.abstract,
         outline: proposal.outline,
         track: proposal.track,
+        tags: proposal.tags,
         anything: proposal.anything,
         language: proposal.language,
         duration: proposal.duration,
         coc: proposal.coc,
-        hasProposals: !_.isEmpty(existing.value())
+        hasProposals: !_.isEmpty(existing.value()),
+        possibleTags: "[" + possibleTags.map(v => `{value: "${v}", text: "${v}"}`).join(',') + "]"
     });
 
 };
@@ -106,6 +110,7 @@ app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
         outline: proposal.outline,
         track: proposal.track,
         duration: proposal.preferredDuration,
+        tags: proposal.tags,
         anything: proposal.isThereAnythingElseYoudLikeToCommunicateToUs,
         language: proposal.language,
         coc: proposal.coc,
@@ -138,6 +143,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         track: input.track,
         preferredDuration: input.duration,
         otherPossibleDurations: input.otherDurations,
+        tags: input.tags,
         isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
         language: input.language,
         coc: input.coc,

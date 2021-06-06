@@ -95,6 +95,14 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <div>
+                                <label for="tagsInput" class="control-label">Tags</label>
+                                <button type="button" class="btn btn-outline-info btn-sm" data-container="body" data-toggle="popover"
+                                    data-placement="right" data-html=true data-content="{{{tagsAdvice}}}">{{{adviceIcon}}}</button>
+                            </div>
+                            <input id="tagsInput" aria-label="Tags" name="tags" value="{{tags}}"/>
+                        </div>
+                        <div class="form-group">
                             <label for="anything-input" class='control-label'>Is there anything else you would like to tell
                                 us?</label>
                             <textarea class="form-control" aria-label="Is there anything else you would like to tell us?"
@@ -156,3 +164,15 @@
         </div>
     </div>
 </div>
+<script>
+var config = {options: {{{possibleTags}}},
+create: function(input){
+	return {value:input,text:input}
+},
+plugins: {
+		remove_button:{
+			title:'Remove this item',
+		}
+	},};
+new TomSelect('#tagsInput',config);
+</script>
