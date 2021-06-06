@@ -47,7 +47,8 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
-db.defaults({ cfps: [], users: [], scores: [] }).write();
+db.defaults({ cfps: [], users: [], scores: [], tags: [{value: "refactoring", count: 0, checked: true},{value: "documentation", count: 0, checked: true}] }).write();
+
 
 login.prepareLogin(app, db);
 
@@ -64,7 +65,9 @@ app.post('/instructions', login.requireAuth, (req, res) => {
 const renderCFP = (proposal, req, res) => {
     const user = db.get('users').find({ userId: req.user }).value();
     let existing = db.get('cfps').filter({ writer: req.user });
-    let possibleTags = ['refactoring', 'testing', 'coding', 'accessibility'].concat(proposal.tags.split(','));
+
+    const checkedTags = db.get('tags').filter(t => t.checked).value().map(t => t.value);
+    let possibleTags = checkedTags.concat(proposal.tags.split(','));
 
     res.render('proposal/cfp', {
         adviceIcon: octicons['light-bulb'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
@@ -122,6 +125,19 @@ app.get('/cfp', login.requireAuth, (req, res) => {
     renderCFP({cfpid: shortid.generate()}, req, res);
 });
 
+const upsertTag = (tag, allTags) => {
+    let existing = allTags.find({ value: tag });
+    if (_.isEmpty(existing.value())) {
+        allTags.push({
+            value: tag,
+            count: 1,
+            checked: false
+        }).write();
+    }
+    else {
+        existing.update('count', n => n + 1).write();
+    }
+};
 
 app.post('/cfp', login.requireAuth, (req, res) => {
     input = req.body;
@@ -130,6 +146,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
     }
 
     const proposals = db.get('cfps');
+    const allTags = db.get('tags');
     let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false });
 
     const newLocal = {
@@ -151,10 +168,13 @@ app.post('/cfp', login.requireAuth, (req, res) => {
     };
 
     if (!_.isEmpty(existing.value())) {
+        existing.value().tags.split(',').forEach(t => allTags.find({value: t}).update('count', n => n - 1).write());
+        allTags.remove(t => t.count <= 0 && !t.checked).write();
         existing.assign({ changed: true }).write();
     }
 
     proposals.push(newLocal).write();
+    input.tags.split(',').forEach(t => upsertTag(t, allTags));
 
     const user = db.get('users').find({ userId: req.user });
     user.assign({
