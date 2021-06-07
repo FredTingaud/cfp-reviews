@@ -165,7 +165,8 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
         language: input.language,
         coc: input.coc,
-        writer: req.user
+        writer: req.user,
+        timestamp: Date.now()
     };
 
     if (!_.isEmpty(existing.value())) {
