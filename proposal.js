@@ -141,15 +141,56 @@ const upsertTag = (tag, allTags) => {
     }
 };
 
+const saveUserUpdates = (input, user) => {
+    const userDB = db.get('users').find({ userId: user });
+    userDB.assign({
+        firstName: input.firstName,
+        lastName: input.lastName,
+        speakerBio: input.bio,
+        affiliation: input.affiliation,
+        pastExperience: input.pastExperience
+        }).write();
+};
+
 app.post('/cfp', login.requireAuth, (req, res) => {
     input = req.body;
+
+    const proposals = db.get('cfps');
+    proposals.remove( v => v.index === input.cfpid && !v.finished).write();
+
+    if (input.save)
+    {
+        proposals.push({
+            changed: false,
+            changeId: -1,
+            index: input.cfpid,
+            titleOfThePresentation: input.title,
+            abstract: input.abstract,
+            outline: input.outline,
+            track: input.track,
+            preferredDuration: input.duration,
+            otherPossibleDurations: input.otherDurations,
+            tags: input.tags,
+            isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
+            language: input.language,
+            coc: input.coc,
+            writer: req.user,
+            finished: false,
+            timestamp: Date.now()
+        }).write();
+
+        saveUserUpdates(input, req.user);
+    
+        res.render("proposal/not_done");
+        return;
+    }
+    
     if (!input.coc){
         return;
     }
 
-    const proposals = db.get('cfps');
     const allTags = db.get('tags');
-    let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false });
+    let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false, finished: true });
 
     const newLocal = {
         changed: false,
@@ -166,6 +207,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         language: input.language,
         coc: input.coc,
         writer: req.user,
+        finished: true,
         timestamp: Date.now()
     };
 
@@ -176,24 +218,21 @@ app.post('/cfp', login.requireAuth, (req, res) => {
     }
 
     proposals.push(newLocal).write();
+
     input.tags.split(',').forEach(t => upsertTag(t, allTags));
 
-    const user = db.get('users').find({ userId: req.user });
-    user.assign({
-        firstName: input.firstName,
-        lastName: input.lastName,
-        speakerBio: input.bio,
-        affiliation: input.affiliation,
-        pastExperience: input.pastExperience
-        }).write();
-
+    saveUserUpdates(input, req.user);
+    
     res.render("proposal/done");
 });
 
 app.get('/proposals', login.requireAuth, (req, res) => {
     let proposals = db.get('cfps').filter({ writer: req.user, changed: false }).sortBy('index').value();
 
-    res.render("proposal/all", {proposals: proposals});
+    
+    res.render("proposal/all", {proposals: proposals,
+        draftIcon: octicons['issue-draft'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
+        doneIcon: octicons['issue-closed'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" })});
 });
 
 const logObject = (obj) => {
