@@ -68,7 +68,8 @@ const renderCFP = (proposal, req, res) => {
     let existing = db.get('cfps').filter({ writer: req.user });
 
     const checkedTags = db.get('tags').filter(t => t.checked).value().map(t => t.value);
-    let possibleTags = checkedTags.concat(proposal.tags.split(','));
+    const currentTags = proposal.tags ? proposal.tags.split(',') : [];
+    let possibleTags = checkedTags.concat(currentTags);
 
     res.render('proposal/cfp', {
         adviceIcon: octicons['light-bulb'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
