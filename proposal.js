@@ -47,7 +47,8 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
-db.defaults({ cfps: [], users: [], scores: [], tags: [{value: "refactoring", count: 0, checked: true},{value: "documentation", count: 0, checked: true}] }).write();
+const TAGS = ["tooling", "testing", "refactoring", "libraries", "STL", "C++ evolution", "accessibility", "soft skills", "language", "essentials", "performance"];
+db.defaults({ cfps: [], users: [], scores: [], tags: TAGS.map(t => ({value: t, count: 0, checked: true})) }).write();
 
 
 login.prepareLogin(app, db);
