@@ -152,7 +152,6 @@ app.post('/cfp', login.requireAuth, (req, res) => {
     let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false });
 
     const newLocal = {
-        timestamp: Date.now,
         changed: false,
         changeId: _.isEmpty(existing.value()) ? 0 : existing.value().changeId + 1,
         index: input.cfpid,
