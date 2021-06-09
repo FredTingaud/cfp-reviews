@@ -3,7 +3,7 @@
 </nav>
 
 <div class="row justify-content-md-center" style="margin-top: 100px">
-    <div class="col-md-6">
+    <div class="col-sm-8">
 
         {{#if message}}
         <div class="alert {{messageClass}}" role="alert">
@@ -11,18 +11,30 @@
         </div>
         {{/if}}
 
-    <form method="POST" action="/login">
-        <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+        <div class="row">
+            <div class="col-6">
+                <div class="card p-3 ">
+                    <form method="POST" action="/login">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input name="email" type="email" class="form-control" id="exampleInputEmail1"
+                                placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input name="password" type="password" class="form-control" id="exampleInputPassword1"
+                                placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card p-3 ">
+                    <a class="btn btn-primary" href="/register">Register new account</a>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
-        <a class="btn btn-primary" href="/register">Register</a>
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
     </div>
 </div>
-
