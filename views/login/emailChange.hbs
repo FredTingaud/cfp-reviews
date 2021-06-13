@@ -1,0 +1,14 @@
+<h1>Administration</h1>
+
+<h2>{{firstName}} {{lastName}}</h2>
+
+<form method="POST" action="/email">
+
+    <input class="form-control" name="userId" value="{{userId}}" readonly>
+    <div class="form-group required">
+        <label for="emailInput" class='control-label'>Email address</label>
+        <input name="mail" type="email" class="form-control" id="emailInput" value="{{mail}}" type="email" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary my-3">Update</button>
+</form>
