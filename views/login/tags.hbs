@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Propose a Talk</a>
+
+    <ul class="navbar-nav navbar-expand-md ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/instructions">Home</a>
+        </li>
+    </ul>
+</nav>
+
+<div>
+    <h1>Tags</h1>
+    <form method="POST" action="/tags">
+        <table class="table">
+            <tbody>
+
+                {{#each tags}}
+                <tr>
+                    <td> {{#if this.checked}} {{{../checkedIcon}}} {{else}} {{{../uncheckedIcon}}} {{/if}} </td>
+                    <td>{{this.value}}</td>
+                    <td> {{this.count}}</td>
+                    <td> {{#if this.checked}} <button type="submit" name="uncheck" value={{this.value}}
+                            class="btn btn-danger">Uncheck</button> {{else}} <button type="submit" name="check"
+                            value={{this.value}} class="btn btn-success">Check</button>{{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </form>
+</div>
