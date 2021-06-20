@@ -1,3 +1,7 @@
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
 <h1>Administration</h1>
 
 <h2>{{firstName}} {{lastName}}</h2>

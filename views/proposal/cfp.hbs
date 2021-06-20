@@ -16,6 +16,10 @@
     </ul>
 </nav>
 
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
 <div>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active my-3" id="proposal" role="tabpanel" aria-labelledby="proposal-tab">

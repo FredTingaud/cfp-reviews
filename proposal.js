@@ -1,13 +1,10 @@
 const express = require('express');
-const exphbs = require('express-handlebars');
-const path = require('path');
 const _ = require('lodash');
 const marked = require('marked');
 const login = require('./lib/login');
 const advices = require('./lib/advices');
 const octicons = require("@primer/octicons");
 const shortid = require('shortid')
-
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
 
@@ -15,29 +12,6 @@ const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
 
 const app = express();
-
-// To support URL-encoded bodies
-app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static(path.join(__dirname, '/public')));
-
-app.engine('hbs', exphbs({
-    extname: '.hbs',
-    helpers: {
-        input_long: function (str) {
-            return DOMPurify.sanitize(marked(str || ""));
-        },
-        input_short: function (str) {
-            return DOMPurify.sanitize(marked.parseInline(str || ""));
-        },
-        checked: function (value, test) {
-            if (value === undefined) return '';
-            return value === test ? 'checked' : '';
-        }
-    }
-}));
-
-app.set('view engine', 'hbs');
 
 app.listen(3000);
 
@@ -47,19 +21,15 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
-const TAGS = ["tooling", "testing", "refactoring", "libraries", "STL", "C++ evolution",
-    "accessibility", "soft skills", "language", "essentials", "performance",
-    "modules", "concepts", "pattern matching", "metaprogramming", "contracts", "spaceship operator"];
-
-db.defaults({ cfps: [], users: [], scores: [], tags: TAGS.map(t => ({ value: t, count: 0, checked: true })) }).write();
-
-
 login.prepareLogin(app, db);
 
 app.get('/instructions', login.requireAuth, (req, res) => {
     let existing = db.get('cfps').filter({ writer: req.user });
 
-    res.render('proposal/instructions', { hasProposals: !_.isEmpty(existing.value()) });
+    res.render('proposal/instructions', {
+        alerts: db.get('alerts').value(),
+        hasProposals: !_.isEmpty(existing.value())
+    });
 });
 
 app.post('/instructions', login.requireAuth, (req, res) => {
@@ -75,6 +45,7 @@ const renderCFP = (proposal, req, res) => {
     let possibleTags = checkedTags.concat(currentTags);
 
     res.render('proposal/cfp', {
+        alerts: db.get('alerts').value(),
         adviceIcon: octicons['light-bulb'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
         titleAdvice: DOMPurify.sanitize(marked(advices.title)),
         trackAdvice: advices.track,
@@ -233,6 +204,7 @@ app.get('/preview/:cfpid', login.requireAuth, (req, res) => {
     const user = db.get('users').find({ userId: req.user }).value();
 
     res.render('proposal/preview', {
+        alerts: db.get('alerts').value(),
         title: proposal.titleOfThePresentation,
         abstract: proposal.abstract,
         outline: proposal.outline,
@@ -258,6 +230,7 @@ app.get('/proposals', login.requireAuth, (req, res) => {
 
 
     res.render("proposal/all", {
+        alerts: db.get('alerts').value(),
         proposals: proposals,
         draftIcon: octicons['issue-draft'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
         doneIcon: octicons['issue-closed'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" })

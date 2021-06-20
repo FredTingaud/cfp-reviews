@@ -14,6 +14,10 @@
     </ul>
 </nav>
 
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
 {{#if finished}}
 <p>Thanks for submitting your proposal!</p>
 <p>You can still come back and edit your proposal until the call for paper is closed.</p>

@@ -1,8 +1,5 @@
 const express = require('express');
-const exphbs = require('express-handlebars');
-const path = require('path');
 const _ = require('lodash');
-const marked = require('marked');
 const login = require('./lib/login');
 
 const createDOMPurify = require('dompurify');
@@ -12,29 +9,6 @@ const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
 
 const app = express();
-
-// To support URL-encoded bodies
-app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static(path.join(__dirname, '/public')));
-
-app.engine('hbs', exphbs({
-    extname: '.hbs',
-    helpers: {
-        input_long: function (str) {
-            return DOMPurify.sanitize(marked(str || ""));
-        },
-        input_short: function (str) {
-            return DOMPurify.sanitize(marked.parseInline(str || ""));
-        },
-        checked: function (value, test) {
-            if (value === undefined) return '';
-            return value === test ? 'checked' : '';
-        }
-    }
-}));
-
-app.set('view engine', 'hbs');
 
 app.listen(3000);
 
@@ -111,6 +85,7 @@ app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
     }
 
     res.render('review/cfp', {
+        alerts: db.get('alerts').value(),
         index: req.params.cfpid,
         title: cfp.titleOfThePresentation,
         abstract: cfp.abstract,
@@ -140,7 +115,7 @@ app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
 });
 
 app.get('/instructions', login.requireAuth, (req, res) => {
-    res.render('review/instructions');
+    res.render('review/instructions', {alerts: db.get('alerts').value()});
 });
 
 app.post('/instructions', login.requireAuth, (req, res) => {
@@ -227,6 +202,7 @@ app.get('/done', login.requireAuth, (req, res) => {
         }
     });
     res.render('review/done', {
+        alerts: db.get('alerts').value(),
         reviewed: reviewed,
         refused: refused,
     });
@@ -261,6 +237,7 @@ app.get('/overview', login.requireAuth, (req, res) => {
         return state1 - state2;
     });
     res.render('review/all', {
+        alerts: db.get('alerts').value(),
         reviews: reviews
     });
 });

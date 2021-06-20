@@ -42,11 +42,11 @@ app.set('view engine', 'hbs');
 app.listen(3000);
 
 app.get('/', function (req, res) {
-    res.render('home');
+    res.render('home', {alerts: db.get('alerts').value()});
 });
 
 app.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register', {alerts: db.get('alerts').value()});
 });
 
 const crypto = require('crypto');
@@ -73,6 +73,7 @@ app.post('/register', (req, res) => {
         if (!_.isEmpty(db.get('users').find({ email: email }).value())) {
 
             res.render('register', {
+                alerts: db.get('alerts').value(),
                 message: 'User already registered.',
                 messageClass: 'alert-danger'
             });
@@ -97,11 +98,13 @@ app.post('/register', (req, res) => {
         }).write();
 
         res.render('home', {
+            alerts: db.get('alerts').value(),
             message: 'Registration Complete. Please login to continue.',
             messageClass: 'alert-success'
         });
     } else {
         res.render('register', {
+            alerts: db.get('alerts').value(),
             message: 'Password does not match.',
             messageClass: 'alert-danger'
         });
@@ -220,6 +223,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
     }
 
     res.render('cfp', {
+        alerts: db.get('alerts').value(),
         index: req.params.cfpid,
         title: cfp.titleOfThePresentation,
         abstract: cfp.abstract,
@@ -249,7 +253,7 @@ app.get('/cfp/:cfpid', requireAuth, (req, res) => {
 });
 
 app.get('/instructions', requireAuth, (req, res) => {
-    res.render('instructions');
+    res.render('instructions', {alerts: db.get('alerts').value()});
 });
 
 app.post('/instructions', requireAuth, (req, res) => {
@@ -336,6 +340,7 @@ app.get('/done', requireAuth, (req, res) => {
         }
     });
     res.render('done', {
+        alerts: db.get('alerts').value(),
         reviewed: reviewed,
         refused: refused,
     });
@@ -370,6 +375,7 @@ app.get('/overview', requireAuth, (req, res) => {
         return state1 - state2;
     });
     res.render('all', {
+        alerts: db.get('alerts').value(),
         reviews: reviews
     });
 });
@@ -378,6 +384,7 @@ app.get('/account', requireAuth, (req, res) => {
     const user = db.get('users').find({ email: req.user }).value();
 
     res.render('account', {
+        alerts: db.get('alerts').value(),
         admin: user.admin,
         mail: req.user,
         firstName: user.firstName,

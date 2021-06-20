@@ -8,6 +8,10 @@
     </ul>
 </nav>
 
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
 <form method="POST" action="/account">
     <div class="form-group required">
         <label for="emailInput" class='control-label'>Email address</label>
@@ -32,7 +36,7 @@
     <div class="form-group">
         <label for="confirmPasswordInput" class='control-label'>Confirm Password</label>
         <input name="confirmPassword" type="password" class="form-control" id="confirmPasswordInput"
-               placeholder="Re-enter your password here">
+            placeholder="Re-enter your password here">
     </div>
 
     <div class="form-group">
@@ -47,18 +51,22 @@
 
     <div class="form-group">
         <label for="pastExperience-input" class='control-label'>Past Experience</label>
-        <textarea name="pastExperience" type="text" class="form-control" id="pastExperience-input">{{pastExperience}}</textarea>
+        <textarea name="pastExperience" type="text" class="form-control"
+            id="pastExperience-input">{{pastExperience}}</textarea>
     </div>
 
     <button type="submit" class="btn btn-primary my-3">Update</button>
 
     {{#if admin}}
-    <br/>
+    <br />
     <a class="btn btn-primary" href="/tags">
         Tags
     </a>
     <a class="btn btn-primary" href="/users">
         Users
+    </a>
+    <a class="btn btn-primary" href="/alerts">
+        Alerts
     </a>
     {{/if}}
 </form>

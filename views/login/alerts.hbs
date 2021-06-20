@@ -1,0 +1,127 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Propose a Talk</a>
+
+    <ul class="navbar-nav navbar-expand-md ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/instructions">Home</a>
+        </li>
+    </ul>
+</nav>
+
+<h1>Alerts</h1>
+
+<form method="POST" action="/alerts">
+    <table class="table">
+        <tbody>
+            {{#each alerts}}
+            <tr>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-{{this.class}}" type="button"
+                            id="dropdownMenu{{this.alertId}}" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            {{this.class}}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu{{this.alertId}}">
+                            <button class="dropdown-item btn-success" type="submit" name="changeAlert"
+                                value="success/{{this.alertId}}">success</button>
+                            <button class="dropdown-item btn-danger" type="submit" name="changeAlert"
+                                value="danger/{{this.alertId}}">danger</button>
+                            <button class="dropdown-item btn-warning" type="submit" name="changeAlert"
+                                value="warning/{{this.alertId}}">warning</button>
+                            <button class="dropdown-item btn-info" type="submit" name="changeAlert"
+                                value="info/{{this.alertId}}">info</button>
+                            <button class="dropdown-item btn-primary" type="submit" name="changeAlert"
+                                value="primary/{{this.alertId}}">primary</button>
+                            <button class="dropdown-item btn-secondary" type="submit" name="changeAlert"
+                                value="secondary/{{this.alertId}}">secondary</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <textarea name="message-{{this.alertId}}" type="text" class="form-control"
+                        id="message-input-{{this.alertId}}">{{this.message}}</textarea>
+                </td>
+                <td> <button type="submit" name="change" value={{this.alertId}}
+                        class="btn btn-primary">{{{../editIcon}}}</button>
+                </td>
+                <td> <button type="submit" name="remove" value={{this.alertId}}
+                        class="btn btn-danger">{{{../removeIcon}}}</button>
+                </td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle btn-success" type="button" id="dropdownMenuAdd"
+                            name="class" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            success
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuAdd">
+                            <button class="dropdown-item btn-success" type="button" id="ddsuccess"
+                                value="alert-success/add">success</button>
+                            <button class="dropdown-item btn-danger" type="button" id="dddanger"
+                                value="alert-danger/add">danger</button>
+                            <button class="dropdown-item btn-warning" type="button" id="ddwarning"
+                                value="alert-warning/add">warning</button>
+                            <button class="dropdown-item btn-info" type="button" id="ddinfo"
+                                value="alert-info/add">info</button>
+                            <button class="dropdown-item btn-primary" type="button" id="ddprimary"
+                                value="primary-info/add">primary</button>
+                            <button class="dropdown-item btn-secondary" type="button" id="ddsecondary"
+                                value="secondary-info/add">secondary</button>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <textarea name="message" type="text" class="form-control" id="message-input"></textarea>
+                </td>
+                <td><input name="alertClass" id="alertClass" type="hidden" value="success"> </td>
+                <td> <button type="submit" name="add" value="yes" class="btn btn-primary">{{{addIcon}}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#ddsuccess').click(function () {
+            alert("Success!");
+            $('#dropdownMenuAdd').text('success');
+            $('#dropdownMenuAdd').removeClass();
+            $('#dropdownMenuAdd').addClass('btn dropdown-toggle btn-success');
+            $('#alertClass').val('success');
+        });
+        $('#dddanger').click(function () {
+            $('#dropdownMenuAdd').text('danger');
+            $('#dropdownMenuAdd').removeClass();
+            $('#dropdownMenuAdd').addClass('btn dropdown-toggle btn-danger');
+            $('#alertClass').val('danger');
+        });
+        $('#ddwarning').click(function () {
+            $('#dropdownMenuAdd').text('warning');
+            $('#dropdownMenuAdd').removeClass();
+            $('#dropdownMenuAdd').addClass('btn dropdown-toggle btn-warning');
+            $('#alertClass').val('warning');
+        });
+        $('#ddinfo').click(function () {
+            $('#dropdownMenuAdd').text('info');
+            $('#dropdownMenuAdd').removeClass();
+            $('#dropdownMenuAdd').addClass('btn dropdown-toggle btn-info');
+            $('#alertClass').val('info');
+        });
+        $('#ddprimary').click(function () {
+            $('#dropdownMenuAdd').text('primary');
+            $('#dropdownMenuAdd').removeClass();
+            $('#dropdownMenuAdd').addClass('btn dropdown-toggle btn-primary');
+            $('#alertClass').val('primary');
+        });
+        $('#ddsecondary').click(function () {
+            $('#dropdownMenuAdd').text('secondary');
+            $('#dropdownMenuAdd').removeClass();
+            $('#dropdownMenuAdd').addClass('btn dropdown-toggle btn-secondary');
+            $('#alertClass').val('secondary');
+        });
+    });
+</script>

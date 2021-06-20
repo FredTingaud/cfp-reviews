@@ -14,6 +14,10 @@
     </ul>
 </nav>
 
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
 <span class="done">reviews you did</span>
 <span class="skipped">reviews you skipped</span>
 <div>

@@ -16,6 +16,9 @@
     </ul>
 </nav>
 
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
 
 <div class="row justify-content-md-center my-3" style="margin-top: 30px">
     <div class="col-md-8">

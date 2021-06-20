@@ -8,6 +8,10 @@
     </ul>
 </nav>
 
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
 <div>
     <h1>Tags</h1>
     <form method="POST" action="/tags">
