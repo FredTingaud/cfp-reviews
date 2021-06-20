@@ -102,6 +102,7 @@ const renderCFP = (proposal, req, res) => {
         language: proposal.language,
         duration: proposal.duration,
         coc: proposal.coc,
+        finished: proposal.finished,
         hasProposals: !_.isEmpty(existing.value()),
         possibleTags: "[" + possibleTags.map(v => `{value: "${v}", text: "${v}"}`).join(',') + "]"
     });
@@ -122,12 +123,13 @@ app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
         anything: proposal.isThereAnythingElseYoudLikeToCommunicateToUs,
         language: proposal.language,
         coc: proposal.coc,
-        cfpid: req.params.cfpid
+        cfpid: req.params.cfpid,
+        finished: proposal.finished
     }, req, res);
 });
 
 app.get('/cfp', login.requireAuth, (req, res) => {
-    renderCFP({ cfpid: shortid.generate() }, req, res);
+    renderCFP({ cfpid: shortid.generate(), finished: false }, req, res);
 });
 
 const upsertTag = (tag, allTags) => {

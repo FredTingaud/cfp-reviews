@@ -162,8 +162,12 @@
                     <label for="coc-input" class="control-label">I agree to respect the <a
                             href="https://berlincodeofconduct.org/">Berlin Code Of Conduct</a></label>
                 </div>
+                {{#if finished}}
+                <button type="submit" name="push" value="submit" class="btn btn-primary">Edit submission</button>
+                {{else}}
                 <button type="submit" name="push" value="submit" class="btn btn-primary">Submit</button>
                 <button type="submit" name="save" value="backup" class="btn btn-secondary" formnovalidate>Save & Preview</button>
+                {{/if}}
             </form>
         </div>
         <div class="tab-pane fade show active" id="preview" role="tabpanel" aria-labelledby="preview-tab">
