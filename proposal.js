@@ -232,8 +232,8 @@ app.get('/proposals', login.requireAuth, (req, res) => {
     res.render("proposal/all", {
         alerts: db.get('alerts').value(),
         proposals: proposals,
-        draftIcon: octicons['issue-draft'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" }),
-        doneIcon: octicons['issue-closed'].toSVG({ height: "1em", width: "1em", "aria-label": "Hint", fill: "currentColor" })
+        draftIcon: octicons['issue-draft'].toSVG({ height: "1em", width: "1em", "aria-label": "Draft", fill: "currentColor" }),
+        doneIcon: octicons['issue-closed'].toSVG({ height: "1em", width: "1em", "aria-label": "Submitted", fill: "currentColor" })
     });
 });
 
