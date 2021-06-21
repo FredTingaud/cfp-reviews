@@ -24,7 +24,7 @@ const db = low(adapter);
 login.prepareLogin(app, db);
 
 app.get('/instructions', login.requireAuth, (req, res) => {
-    let existing = db.get('cfps').filter({ writer: req.user });
+    let existing = db.get('cfps').filter(cfp => cfp.writer.some(u => u.id === req.user));
 
     res.render('proposal/instructions', {
         alerts: db.get('alerts').value(),
@@ -38,7 +38,7 @@ app.post('/instructions', login.requireAuth, (req, res) => {
 
 const renderCFP = (proposal, req, res) => {
     const user = db.get('users').find({ userId: req.user }).value();
-    let existing = db.get('cfps').filter({ writer: req.user });
+    let existing = db.get('cfps').filter(cfp => cfp.writer.some(u => u.id === req.user));
 
     const checkedTags = db.get('tags').filter(t => t.checked).value().map(t => t.value);
     const currentTags = proposal.tags ? proposal.tags.split(',') : [];
@@ -82,7 +82,7 @@ const renderCFP = (proposal, req, res) => {
 
 app.get('/cfp/:cfpid', login.requireAuth, (req, res) => {
     const proposals = db.get('cfps');
-    let proposal = proposals.find({ index: req.params.cfpid, writer: req.user, changed: false }).value();
+    let proposal = proposals.filter({ index: req.params.cfpid, changed: false }).find(cfp => cfp.writer.some(u => u.id === req.user)).value();
 
     renderCFP({
         title: proposal.titleOfThePresentation,
@@ -149,7 +149,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
             isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
             language: input.language,
             coc: input.coc,
-            writer: req.user,
+            writer: [{id: req.user, checked: true}],
             finished: false,
             timestamp: Date.now()
         }).write();
@@ -160,7 +160,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
         }
 
         const allTags = db.get('tags');
-        let existing = proposals.find({ index: input.cfpid, writer: req.user, changed: false, finished: true });
+        let existing = proposals.filter({ index: input.cfpid, changed: false, finished: true }).find(cfp => cfp.writer.some(u => u.id === req.user));
 
         const newLocal = {
             changed: false,
@@ -176,7 +176,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
             isThereAnythingElseYoudLikeToCommunicateToUs: input.anything,
             language: input.language,
             coc: input.coc,
-            writer: req.user,
+            writer: [{id: req.user, checked: true}],
             finished: true,
             timestamp: Date.now()
         };
@@ -199,7 +199,7 @@ app.post('/cfp', login.requireAuth, (req, res) => {
 
 app.get('/preview/:cfpid', login.requireAuth, (req, res) => {
     const proposals = db.get('cfps');
-    let proposal = proposals.find({ index: req.params.cfpid, writer: req.user, changed: false }).value();
+    let proposal = proposals.filter({ index: req.params.cfpid, changed: false }).find(cfp => cfp.writer.some(u => u.id === req.user)).value();
 
     const user = db.get('users').find({ userId: req.user }).value();
 
@@ -226,7 +226,7 @@ app.get('/preview/:cfpid', login.requireAuth, (req, res) => {
 
 
 app.get('/proposals', login.requireAuth, (req, res) => {
-    let proposals = db.get('cfps').filter({ writer: req.user, changed: false }).sortBy('index').value();
+    let proposals = db.get('cfps').filter(cfp => !cfp.changed && cfp.writer.some(u => u.id === req.user)).sortBy('index').value();
 
 
     res.render("proposal/all", {
