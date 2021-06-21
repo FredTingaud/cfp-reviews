@@ -25,7 +25,7 @@
                 <h1>My proposals</h1>
                 {{#each proposals}}
                 {{#if this.finished}} {{{../doneIcon}}} {{else}} {{{../draftIcon}}} {{/if}} <a
-                    href="/cfp/{{this.index}}">
+                    href="/preview/{{this.index}}">
                     {{this.titleOfThePresentation}}</a><br />
                 {{/each}}
             </div>
