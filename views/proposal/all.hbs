@@ -24,8 +24,9 @@
             <div class="col-md-10">
                 <h1>My proposals</h1>
                 {{#each proposals}}
-                {{#if this.finished}} {{{../doneIcon}}} {{else}} {{{../draftIcon}}} {{/if}} <a
+                <a
                     href="/preview/{{this.index}}">
+                    {{#if this.finished}} {{{../doneIcon}}} {{else}} {{{../draftIcon}}} {{/if}} 
                     {{this.titleOfThePresentation}}</a><br />
                 {{/each}}
             </div>
