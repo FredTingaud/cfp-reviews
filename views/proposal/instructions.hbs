@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Propose a Talk</a>
 
+    {{#if hasUser}}
     <ul class="navbar-nav navbar-expand-md ml-auto">
         <li class="nav-item">
             <a class="nav-link" href="/account">Account</a>
@@ -13,17 +14,56 @@
             <a class="nav-link" href="/proposals">My Proposals</a>
         </li>
         {{/if}}
+        <li class="nav-item">
+            <a class="nav-link" href="/disconnect" data-toggle="tooltip" data-placement="bottom" title="Disconnect">{{{icon 'x-circle-fill' 'disconnect' '#998030'}}}</a>
+        </li>
     </ul>
+    {{/if}}
 </nav>
 
 {{#each alerts}}
 <div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
 {{/each}}
 
-<div class="row justify-content-md-center my-3" style="margin-top: 30px">
-    <div class="col-md-8">
-        <p>You are about to propose a talk to CPPP.</p>
 
+<div class="row justify-content-md-center">
+    <div class="col-sm-8">
+        {{#if hasUser}}
+        <div class="row">
+            <h4>Welcome {{welcome}}</h4>
+        </div>
+        {{else}}
+        <div class="row">
+            <div class="col-6">
+                <div class="card p-3 ">
+                    <form method="POST" action="/login">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input name="email" type="email" class="form-control" id="exampleInputEmail1"
+                                placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input name="password" type="password" class="form-control" id="exampleInputPassword1"
+                                placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card p-3 ">
+                    <a class="btn btn-primary" href="/register">Register new account</a>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<div class="row justify-content-md-center my-3">
+    <div class="col-md-8">
         <h2> Who should propose a talk?</h2>
 
         <p>Anybody who wants to!</p>
@@ -71,11 +111,14 @@
 
         <h2>How to write your proposal?</h2>
 
-        <p>Every field in the form is explained in details to help you write the most effective proposal. These explanations
-            are a shorter version of <a href="https://fredtingaud.github.io/talking-cfp/" target="blank">this blog post</a>.
+        <p>Every field in the form is explained in details to help you write the most effective proposal. These
+            explanations
+            are a shorter version of <a href="https://fredtingaud.github.io/talking-cfp/" target="blank">this blog
+                post</a>.
         </p>
 
-        <p>Once you submitted your proposal, you can still come back and modify it until the end of the Call for Proposals.
+        <p>Once you submitted your proposal, you can still come back and modify it until the end of the Call for
+            Proposals.
             You can also save your work in progress and come back to finish it afterward.
         </p>
 
@@ -96,21 +139,28 @@
         </p>
 
         <h2>How we will review</h2>
-        
+
         <p>All proposals will be reviewed "anonymously". Which means that reviewers will only have access
-            to the fields describing the content of the talk and not the fields related to the speaker. The anonymity is not
-            perfect because some authors might still be identifiable through their abstract, but we believe it should still
+            to the fields describing the content of the talk and not the fields related to the speaker. The anonymity is
+            not
+            perfect because some authors might still be identifiable through their abstract, but we believe it should
+            still
             work for the wide majority of the proposals.
         </p>
 
-        <p>After the anonymous review, the conference organizers will have access to all information about the author and can
-            amend their review. These changes are visible to all the juree members who already reviewed the same proposal.
+        <p>After the anonymous review, the conference organizers will have access to all information about the author
+            and can
+            amend their review. These changes are visible to all the juree members who already reviewed the same
+            proposal.
         </p>
 
-        <p>The rating given to the proposals are of course taken into account, but the organizers can decide to select or refuse
-            a talk despite it's rating to ensure a better diversity of subjects. For example, if there are three talks with very near subjects and 
-            high ratings, the organizers can decide to refuse the lowest rated proposal among the three. Conversely, a proposal
-            with a lower rating on an important subject that is not covered otherwise might be accepted. 
+        <p>The rating given to the proposals are of course taken into account, but the organizers can decide to select
+            or refuse
+            a talk despite it's rating to ensure a better diversity of subjects. For example, if there are three talks
+            with very near subjects and
+            high ratings, the organizers can decide to refuse the lowest rated proposal among the three. Conversely, a
+            proposal
+            with a lower rating on an important subject that is not covered otherwise might be accepted.
         </p>
 
         <a class="btn btn-primary" href="/cfp">Write your proposal</a>

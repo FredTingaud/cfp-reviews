@@ -3,7 +3,10 @@
 
     <ul class="navbar-nav navbar-expand-md ml-auto">
         <li class="nav-item">
-            <a class="nav-link" href="/instructions">Home</a>
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/disconnect" data-toggle="tooltip" data-placement="bottom" title="Disconnect">{{{icon 'x-circle-fill' 'disconnect' '#998030'}}}</a>
         </li>
     </ul>
 </nav>
@@ -26,6 +29,10 @@
                     <td>{{this.email}}<button type="submit" name="email" value={{this.userId}}
                             class="btn btn-primary-outline">{{{../editIcon}}}</button></td>
                     <td>{{this.timestamp}}</td>
+                    <td> {{#if this.viewBio}} <button type="submit" name="unbio" value={{this.userId}}
+                            class="btn btn-danger">Disable bio viewing</button> {{else}} <button type="submit" name="bio"
+                            value={{this.userId}} class="btn btn-success">View bio</button>{{/if}}
+                    </td>
                     <td> {{#if this.admin}} <button type="submit" name="unadmin" value={{this.userId}}
                             class="btn btn-danger">Disable admin</button> {{else}} <button type="submit" name="admin"
                             value={{this.userId}} class="btn btn-success">Make admin</button>{{/if}}
