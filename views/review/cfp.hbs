@@ -12,7 +12,8 @@
             <a class="nav-link" href="/done">Overview</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/disconnect" data-toggle="tooltip" data-placement="bottom" title="Disconnect">{{{icon 'x-circle-fill' 'disconnect' '#998030'}}}</a>
+            <a class="nav-link" href="/disconnect" data-toggle="tooltip" data-placement="bottom"
+                title="Disconnect">{{{icon 'x-circle-fill' 'disconnect' '#998030'}}}</a>
         </li>
     </ul>
 </nav>
@@ -28,19 +29,23 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#proposal" role="tab" aria-controls="proposal" aria-selected="true">Proposal</a>
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#proposal" role="tab"
+                aria-controls="proposal" aria-selected="true">Proposal</a>
         </li>
         {{#if seeSpeakers}}
         <li class="nav-item">
-            <a class="nav-link" id="speaker-tab" data-toggle="tab" href="#speaker" role="tab" aria-controls="speaker" aria-selected="false">Speaker</a>
+            <a class="nav-link" id="speaker-tab" data-toggle="tab" href="#speaker" role="tab" aria-controls="speaker"
+                aria-selected="false">Speaker</a>
         </li>
         {{/if}}
         <li class="nav-item">
-            <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
+            <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+                aria-selected="false">Review</a>
         </li>
         {{#if reviews}}
         <li class="nav-item">
-            <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other" aria-selected="false">All Reviews</a>
+            <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other"
+                aria-selected="false">All Reviews</a>
         </li>
         {{/if}}
     </ul>
@@ -51,26 +56,26 @@
             <br />
             <h4>Outline</h4>
             <p>{{{input_long outline}}}</p>
-        </div>
-        {{#if seeSpeakers}}
-        <div class="tab-pane fade" id="speaker" role="tabpanel" aria-labelledby="speaker-tab">
-            <h4>{{{input_short speakerName}}}</h4>
-            <i>({{{input_short speakerAffiliation}}})</i>
-            <p>{{{input_long speakerBio}}}</p>
             <br />
-            {{#if speakerName2}}
-            <h4>{{{input_short speakerName2}}}</h4>
-            <i>({{{input_short speakerAffiliation2}}})</i>
-            <p>{{{input_long speakerBio2}}}</p>
-            <br />
-            {{/if}}
-            <h4>Past Experience</h4>
-            <p>{{{input_long pastExperience}}}</p>
+            <h4>Tags</h4>
+            <p>{{tags}}</p>
             {{#if anything}}
             <br />
             <h4>Note</h4>
             <p>{{{input_long anything}}}</p>
             {{/if}}
+
+        </div>
+        {{#if seeSpeakers}}
+        <div class="tab-pane fade" id="speaker" role="tabpanel" aria-labelledby="speaker-tab">
+            {{#each speakers}}
+            <h4>{{this.firstName}} {{this.lastName}}</h4>
+            <i>({{{input_short this.affiliation}}})</i>
+            <p>{{{input_long this.speakerBio}}}</p>
+            <br />
+            <h4>Past Experience</h4>
+            <p>{{{input_long this.pastExperience}}}</p>
+            {{/each}}
         </div>
         {{/if}}
         <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
@@ -88,16 +93,26 @@
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label>Least</label>
-                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1" required {{checked score '1'}}>1</label>
-                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2" required {{checked score '2'}}>2</label>
-                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3" required {{checked score '3'}}>3</label>
-                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4" required {{checked score '4'}}>4</label>
-                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5" required {{checked score '5'}}>5</label>
-                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6" required {{checked score '6'}}>6</label>
-                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7" required {{checked score '7'}}>7</label>
-                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8" required {{checked score '8'}}>8</label>
-                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9" required {{checked score '9'}}>9</label>
-                        <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10" required {{checked score '10'}}>10</label>
+                        <label class="btn btn-light active"><input type="radio" id="score1" name="score" value="1"
+                                required {{checked score '1' }}>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="score2" name="score" value="2"
+                                required {{checked score '2' }}>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="score3" name="score" value="3"
+                                required {{checked score '3' }}>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="score4" name="score" value="4"
+                                required {{checked score '4' }}>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="score5" name="score" value="5"
+                                required {{checked score '5' }}>5</label>
+                        <label class="btn btn-light active"><input type="radio" id="score6" name="score" value="6"
+                                required {{checked score '6' }}>6</label>
+                        <label class="btn btn-light active"><input type="radio" id="score7" name="score" value="7"
+                                required {{checked score '7' }}>7</label>
+                        <label class="btn btn-light active"><input type="radio" id="score8" name="score" value="8"
+                                required {{checked score '8' }}>8</label>
+                        <label class="btn btn-light active"><input type="radio" id="score9" name="score" value="9"
+                                required {{checked score '9' }}>9</label>
+                        <label class="btn btn-light active"><input type="radio" id="score10" name="score" value="10"
+                                required {{checked score '10' }}>10</label>
                         <label>Most</label>
                     </div>
                 </div>
@@ -108,47 +123,65 @@
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label>Unsure</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence1" name="confidence" value="1" required {{checked confidence '1'}}>1</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence2" name="confidence" value="2" required {{checked confidence '2'}}>2</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence3" name="confidence" value="3" required {{checked confidence '3'}}>3</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence4" name="confidence" value="4" required {{checked confidence '4'}}>4</label>
-                        <label class="btn btn-light active"><input type="radio" id="confidence5" name="confidence" value="5" required {{checked confidence '5'}}>5</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence1" name="confidence"
+                                value="1" required {{checked confidence '1' }}>1</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence2" name="confidence"
+                                value="2" required {{checked confidence '2' }}>2</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence3" name="confidence"
+                                value="3" required {{checked confidence '3' }}>3</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence4" name="confidence"
+                                value="4" required {{checked confidence '4' }}>4</label>
+                        <label class="btn btn-light active"><input type="radio" id="confidence5" name="confidence"
+                                value="5" required {{checked confidence '5' }}>5</label>
                         <label>Certain</label>
                     </div>
                 </div>
 
                 <div class="form-group required">
                     <label class='control-label'>Comment for the Selection Committee?</label>
-                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment" name="committee" required>{{committee}}</textarea>
+                    <textarea class="form-control" aria-label="Committee Comment" id="committee-comment"
+                        name="committee" required>{{committee}}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Comment for the Author? (Remember to keep it constructive and actionable)</label>
-                    <textarea class="form-control" aria-label="Author Comment" id="author-comment" name="author">{{author}}</textarea>
+                    <textarea class="form-control" aria-label="Author Comment" id="author-comment"
+                        name="author">{{author}}</textarea>
                 </div>
 
                 <div class="form-group">
                     <div>
-                        <label>The author asked for a preferred duration of {{duration}}{{#if otherDurations}}, but said they could also do it in {{otherDurations}}{{/if}}. If you don't agree with the preferred duration, which duration would you recommend?</label>
+                        <label>The author asked for a preferred duration of {{duration}}{{#if otherDurations}}, but said
+                            they could also do it in {{otherDurations}}{{/if}}. If you don't agree with the preferred
+                            duration, which duration would you recommend?</label>
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-light active"><input type="radio" id="duration1" name="durationReco" value="30 minutes" required {{checked durationReco '30 minutes'}}>30 minutes</label>
-                        <label class="btn btn-light active"><input type="radio" id="duration2" name="durationReco" value="60 minutes" required {{checked durationReco '60 minutes'}}>60 minutes</label>
-                        <label class="btn btn-light active"><input type="radio" id="duration3" name="durationReco" value="90 minutes" required {{checked durationReco '90 minutes'}}>90 minutes</label>
+                        <label class="btn btn-light active"><input type="radio" id="duration1" name="durationReco"
+                                value="30 minutes" required {{checked durationReco '30 minutes' }}>30 minutes</label>
+                        <label class="btn btn-light active"><input type="radio" id="duration2" name="durationReco"
+                                value="60 minutes" required {{checked durationReco '60 minutes' }}>60 minutes</label>
+                        <label class="btn btn-light active"><input type="radio" id="duration3" name="durationReco"
+                                value="90 minutes" required {{checked durationReco '90 minutes' }}>90 minutes</label>
                     </div>
-                    <textarea class="form-control" aria-label="Duration Change Comment" id="duration-comment" name="durationComment">{{durationComment}}</textarea>
+                    <textarea class="form-control" aria-label="Duration Change Comment" id="duration-comment"
+                        name="durationComment">{{durationComment}}</textarea>
                 </div>
 
                 <div class="form-group">
                     <div>
-                        <label>The author asked for the track {{track}}. If you don't agree, which would you recommend?</label>
+                        <label>The author asked for the track {{track}}. If you don't agree, which would you
+                            recommend?</label>
                     </div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-light active"><input type="radio" id="track1" name="trackReco" value="Progress" required {{checked trackReco 'Progress'}}>Progress</label>
-                        <label class="btn btn-light active"><input type="radio" id="track2" name="trackReco" value="Produce" required {{checked trackReco 'Produce'}}>Produce</label>
-                        <label class="btn btn-light active"><input type="radio" id="track3" name="trackReco" value="Push Forward" required {{checked trackReco 'Push Forward'}}>Push Forward</label>
+                        <label class="btn btn-light active"><input type="radio" id="track1" name="trackReco"
+                                value="Progress" required {{checked trackReco 'Progress' }}>Progress</label>
+                        <label class="btn btn-light active"><input type="radio" id="track2" name="trackReco"
+                                value="Produce" required {{checked trackReco 'Produce' }}>Produce</label>
+                        <label class="btn btn-light active"><input type="radio" id="track3" name="trackReco"
+                                value="Push Forward" required {{checked trackReco 'Push Forward' }}>Push Forward</label>
                     </div>
-                    <textarea class="form-control" aria-label="Track Change Comment" id="track-comment" name="trackComment">{{trackComment}}</textarea>
+                    <textarea class="form-control" aria-label="Track Change Comment" id="track-comment"
+                        name="trackComment">{{trackComment}}</textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary">{{#if score}}Modify{{else}}Submit{{/if}}</button>
