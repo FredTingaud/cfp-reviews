@@ -28,7 +28,7 @@
         <thead class="thead-dark"><tr><td>Title</td><td># done</td></tr></thead>
         <tbody>
         {{#each reviews}}
-        <tr class={{#if this.reviewed}} "done" {{else if this.refused}} "skipped" {{else}} "" {{/if}}><td><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td><td>{{this.count}}</td></tr>
+        <tr class="{{#if this.reviewed}} done {{else if this.refused}} skipped{{/if}}"><td>{{#unless this.uptodate}}{{{icon 'issue-reopened' 'Proposal updated since last review' '#995030'}}} {{/unless}}<a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td><td>{{this.count}}</td></tr>
         {{/each}}
         </tbody>
     </table>
