@@ -25,7 +25,7 @@
     <h2>My reviewed submissions</h2>
     <ul>
         {{#each reviewed}}
-        <li><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></li>
+        <li>{{#unless this.uptodate}}{{{icon 'issue-reopened' 'Proposal updated since last review' '#995030'}}} {{/unless}}<a href="/cfp/{{this.cfpId}}">{{this.title}}</a></li>
         {{/each}}
     </ul>
     <h2>Submissions I cannot review</h2>
