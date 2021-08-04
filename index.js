@@ -10,9 +10,9 @@ const adapter = new FileSync('db.json');
 const db = low(adapter);
 
 const proposeApp = express();
-proposeApp.listen(3000);
+proposeApp.listen(process.env.CFP_PORT || 3000);
 proposal.prepareProposal(proposeApp, db);
 
 const reviewApp = express();
-reviewApp.listen(3010);
+reviewApp.listen(process.env.REVIEW_PORT || 3010);
 review.prepareReview(reviewApp, db);
