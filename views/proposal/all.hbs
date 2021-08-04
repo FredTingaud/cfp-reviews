@@ -42,10 +42,14 @@
                     <div class="card-header">Icons</div>
                     <div class="card-body">
                         {{{doneIcon}}} Submitted talks
+                        {{#if hasDraft}}
                         <br />
                         {{{draftIcon}}} Draft talks not yet submitted
+                        {{/if}}
+                        {{#if hasWaiting}}
                         <br />
                         {{{waitingIcon}}} Shared talks your co-author needs to confirm
+                        {{/if}}
                         {{#if unconfirmed}}
                         <br />
                         {{{sharedIcon}}} Shared talks you need to confirm
