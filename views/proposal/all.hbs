@@ -27,9 +27,13 @@
             <div class="col-md-10">
                 <h1>My proposals</h1>
                 {{#each proposals}}
-                <a
-                    href="/preview/{{this.index}}">
-                    {{#if this.finished}} {{{../doneIcon}}} {{else}} {{{../draftIcon}}} {{/if}} 
+                <a href="/preview/{{this.index}}">
+                    {{#if this.finished}}{{{../doneIcon}}} {{else if this.waiting}}{{{../waitingIcon}}} {{else}}{{{../draftIcon}}} {{/if}}
+                    {{this.titleOfThePresentation}}</a><br />
+                {{/each}}
+                {{#each unconfirmed}}
+                <a href="/preview/{{this.index}}">
+                    {{{../sharedIcon}}}
                     {{this.titleOfThePresentation}}</a><br />
                 {{/each}}
             </div>
@@ -37,10 +41,16 @@
                 <div class="card">
                     <div class="card-header">Icons</div>
                     <div class="card-body">
-                {{{doneIcon}}} Submitted talks
-                <br />
-                {{{draftIcon}}} Draft talks not yet submitted
-                </div>
+                        {{{doneIcon}}} Submitted talks
+                        <br />
+                        {{{draftIcon}}} Draft talks not yet submitted
+                        <br />
+                        {{{waitingIcon}}} Shared talks your co-author needs to confirm
+                        {{#if unconfirmed}}
+                        <br />
+                        {{{sharedIcon}}} Shared talks you need to confirm
+                        {{/if}}
+                    </div>
                 </div>
             </div>
         </div>

@@ -26,7 +26,7 @@
 <p>You can still come back and edit your proposal until the call for paper is closed.</p>
 {{else}}
 <p>Your proposal is saved.</p>
-<p><b>It was not submitted yet</b>. Don't forget to come back and submit it before the call for paper is closed.</p>
+<p><b>It was not submitted yet</b>. {{#if uncheckedWriters}} The additional speakers will need to confirm this talk from their account.{{else}} Don't forget to come back and submit it before the call for paper is closed.{{/if}}</p>
 {{/if}}
 
 <input type="hidden" name="cfpid" value="{{cfpid}}">
@@ -120,6 +120,7 @@
             </div>
         </div>
     </div>
+    {{#each checkedWriter}}
     <div class="card my-3">
         <div class="card-header">
             <h5 class="card-title">Speaker</h5>
@@ -154,7 +155,7 @@
                         <h5>Bio</h5>
                     </div>
                     <div class="card-body">
-                        <p>{{{input_long bio}}}</p>
+                        <p>{{{input_long speakerBio}}}</p>
                     </div>
                 </div>
             </div>
@@ -170,11 +171,26 @@
             </div>
         </div>
     </div>
+    {{/each}}
+    {{#if uncheckedWriters}}
+    <div class="card my-3">
+        <div class="card-header">
+            <h5 class="card-title">Unconfirmed Speakers</h5>
+            <h6 class="card-subtitle mb-2 text-muted">These speakers haven't confirmed their participation to the proposal.</h6>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <p>{{uncheckedWriters}}</p>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+    
     <div class="form-group">
         {{#if coc}}<label for="coc-input" class="control-label">I agree to respect the <a
                 href="https://berlincodeofconduct.org/">Berlin Code Of Conduct</a></label>{{/if}}
     </div>
 
-    <a class="btn btn-primary" href="/cfp/{{cfpid}}">Edit or cancel this proposal</a>
+    <a class="btn btn-primary" href="/cfp/{{cfpid}}">Open this proposal</a>
     <a class="btn btn-secondary" href="/proposals">View all my proposals</a>
 </div>
