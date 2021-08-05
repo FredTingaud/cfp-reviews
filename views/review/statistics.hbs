@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">Overview</a>
+    <a class="navbar-brand" href="/">Statistics</a>
 
     <ul class="navbar-nav navbar-expand-md ml-auto">
         <li class="nav-item">
@@ -11,11 +11,9 @@
         <li class="nav-item">
             <a class="nav-link" href="/cfp">New Reviews</a>
         </li>
-        {{#if admin}}
         <li class="nav-item">
-            <a class="nav-link" href="/stats">Statistics</a>
+            <a class="nav-link" href="/done">Overview</a>
         </li>
-        {{/if}}
         <li class="nav-item">
             <a class="nav-link" href="/disconnect">{{{icon 'x-circle-fill' 'Disconnect' '#998030'}}}</a>
         </li>
@@ -26,15 +24,19 @@
 <div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
 {{/each}}
 
-<span class="done">reviews you did</span>
-<span class="skipped">reviews you cannot do</span>
-<div>
-    <table class="table">
-        <thead class="thead-dark"><tr><td>Title</td><td># done</td></tr></thead>
-        <tbody>
-        {{#each reviews}}
-        <tr class="{{#if this.reviewed}} done {{else if this.refused}} skipped{{/if}}"><td>{{#unless this.uptodate}}{{{icon 'issue-reopened' 'Proposal updated since last review' '#995030'}}} {{/unless}}<a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td><td>{{this.count}}</td></tr>
-        {{/each}}
-        </tbody>
-    </table>
-</div>
+<h3>Total proposals</h3>
+{{total}}
+
+<h3>Per Track</h3>
+<p>Progress: {{progress}}</p>
+<p>Produce: {{produce}}</p>
+<p>Push Forward: {{push}}</p>
+
+<h3>Per Language</h3>
+<p>English: {{english}}</p>
+<p>French: {{french}}</p>
+<p>Both: {{both}}</p>
+
+<h3>Per length</h3>
+<p>30 minutes: {{shortTalk}}</p>
+<p>60 minutes: {{longTalk}}</p>
