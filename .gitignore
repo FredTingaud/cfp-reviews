@@ -1,3 +1,4 @@
 .vs
 db.json
 node_modules
+.env
