@@ -26,7 +26,9 @@
 <div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
 {{/each}}
 
-<span class="done">reviews you did</span>
+<h4>{{reviewed}} reviews (out of {{total}}). You reviewed {{percent}}% of the proposals.</h4>
+
+<span class="done">reviews you did</span><br/>
 <span class="skipped">reviews you cannot do</span>
 <div class="my-3">
     <table class="table">
