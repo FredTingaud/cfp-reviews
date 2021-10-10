@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Overview</a>
+
+    <ul class="navbar-nav navbar-expand-md ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/account">Account</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/cfp">New Reviews</a>
+        </li>
+        {{#if admin}}
+        <li class="nav-item">
+            <a class="nav-link" href="/stats">Statistics</a>
+        </li>
+        {{/if}}
+        <li class="nav-item">
+            <a class="nav-link" href="/disconnect">{{{icon 'x-circle-fill' 'Disconnect' '#998030'}}}</a>
+        </li>
+    </ul>
+</nav>
+
+{{#each alerts}}
+<div class="alert alert-{{this.class}} m-3" role="alert">{{{input_long this.message}}}</div>
+{{/each}}
+
+<div class="my-3">
+    <table class="table">
+        <thead class="thead-dark"><tr><td>Title</td><td>Author</td><td>#reviews</td><td>Avg Score</td><td>Median Score</td><td>Avg Confidence</td><td>Weighted</td></tr></thead>
+        <tbody>
+        {{#each reviews}}
+        <tr>
+            <td><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td>
+            <td>{{this.author}}</td>
+            <td>{{this.count}}</td>
+            <td>{{this.average}}</td>
+            <td>{{this.median}}</td>
+            <td>{{this.confidence}}</td>
+            <td>{{this.weighted}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
