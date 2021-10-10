@@ -32,10 +32,10 @@
 <span class="skipped">reviews you cannot do</span>
 <div class="my-3">
     <table class="table">
-        <thead class="thead-dark"><tr><td>Title</td><td># done</td></tr></thead>
+        <thead class="thead-dark"><tr><td>Title</td><td>Author</td><td># done</td></tr></thead>
         <tbody>
         {{#each reviews}}
-        <tr class="{{#if this.reviewed}} done {{else if this.refused}} skipped{{/if}}"><td>{{#unless this.uptodate}}{{{icon 'issue-reopened' 'Proposal updated since last review' '#995030'}}} {{/unless}}<a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td><td>{{this.count}}</td></tr>
+        <tr class="{{#if this.reviewed}} done {{else if this.refused}} skipped{{/if}}"><td>{{#unless this.uptodate}}{{{icon 'issue-reopened' 'Proposal updated since last review' '#995030'}}} {{/unless}}<a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td><td>{{this.author}}</td><td>{{this.count}}</td></tr>
         {{/each}}
         </tbody>
     </table>
