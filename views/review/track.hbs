@@ -49,7 +49,7 @@
         <tbody>
         {{#each reviews}}
         <tr>
-            <td>{{#if this.trackChange}}{{{icon 'arrow-switch' 'Proposed Track Change' '#505050'}}}{{/if}}</td>
+            <td>{{#if this.trackChange}}{{{icon 'arrow-switch' 'Proposed Track Change' '#505050'}}}{{else if this.fromTrackChange}}{{{icon 'arrow-switch' 'Proposed Track Change From Another Track' '#FF5050'}}}{{/if}}</td>
             <td>{{#if this.timeChange}}{{{icon 'history' 'Proposed Time Change' '#505050'}}}{{/if}}</td>
             <td><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td>
             <td>{{this.author}}</td>
