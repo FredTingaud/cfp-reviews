@@ -18,6 +18,20 @@
 <div>
     <form method="POST" action="/users">
         <table class="table">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td># Proposals</td>
+                    <td># Drafts</td>
+                    <td># Reviews</td>
+                    <td>Email</td>
+                    <td>Sign in date</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
             <tbody>
 
                 {{#each users}}
@@ -27,6 +41,7 @@
                     <td>{{this.lastName}}</td>
                     <td>{{this.proposals}}</td>
                     <td>{{this.drafts}}</td>
+                    <td>{{this.reviews}}</td>
                     <td>{{this.email}}<button type="submit" name="email" value={{this.userId}}
                             class="btn btn-primary-outline">{{{../editIcon}}}</button></td>
                     <td>{{this.timestamp}}</td>
