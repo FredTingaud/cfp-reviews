@@ -33,6 +33,8 @@
     <table class="table">
         <thead class="thead-dark">
             <tr>
+                <td></td>
+                <td></td>
                 <td>Title</td>
                 <td>Author</td>
                 <td></td>
@@ -47,6 +49,8 @@
         <tbody>
         {{#each reviews}}
         <tr>
+            <td>{{#if this.trackChange}}{{{icon 'arrow-switch' 'Proposed Track Change' '#505050'}}}{{/if}}</td>
+            <td>{{#if this.timeChange}}{{{icon 'history' 'Proposed Time Change' '#505050'}}}{{/if}}</td>
             <td><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td>
             <td>{{this.author}}</td>
             <td>{{#if this.isShort}}{{{icon 'stopwatch' '30 minutes'}}}{{/if}}</td>
