@@ -45,10 +45,10 @@
                     <td><a href="/cfp/{{this.cfpId}}">{{this.title}}</a></td>
                     <td>{{this.author}}</td>
                     <td>
-                        <select class="form-select" aria-label="Selected" name="selected">
-                            <option {{selected this.selected '' }}></option>
-                            <option value="true" {{selected this.selected 'true' }}>Yes</option>
-                            <option value="false" {{selected this.selected 'false' }}>No</option>
+                        <select class="form-select" aria-label="Selected" name="accepted">
+                            <option {{selected this.accepted '' }}></option>
+                            <option value="true" {{selected this.accepted 'true' }}>Yes</option>
+                            <option value="false" {{selected this.accepted 'false' }}>No</option>
                         </select>
                     </td>
                     <td>
