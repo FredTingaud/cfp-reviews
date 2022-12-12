@@ -12,7 +12,7 @@
     "@primer/octicons": "^14.1.0",
     "cookie-parser": "^1.4.4",
     "dompurify": "^2.2.8",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-handlebars": "^3.1.0",
     "jsdom": "^16.5.3",
     "lowdb": "^1.0.0",
